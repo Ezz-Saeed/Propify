@@ -1,5 +1,8 @@
-﻿namespace API.Models
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace API.Models
 {
+    [Owned]
     public class RefreshToken
     {
         public string Token { get; set; }

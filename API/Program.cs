@@ -3,6 +3,7 @@ using API.Data;
 using API.Helpers;
 using API.Interfaces;
 using API.Models;
+using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,7 @@ namespace API
             builder.Services.AddSwaggerGen();
 
             builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
-            builder.Services.AddScoped<IAuthService, IAuthService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
             builder.Services.AddDbContext<AppDbContext>(options =>
             {

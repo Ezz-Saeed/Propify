@@ -153,7 +153,7 @@ namespace API.Services
                     audience: jwt.Audience,
                     claims: claims,
                     signingCredentials: signinCredentials,
-                    expires: DateTime.Now.AddMinutes(jwt.DurationInMinutes)
+                    expires: DateTime.Now.AddDays(jwt.DurationInMinutes)
                 );
         }
 
