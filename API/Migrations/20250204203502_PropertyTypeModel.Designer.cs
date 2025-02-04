@@ -4,6 +4,7 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250204203502_PropertyTypeModel")]
+    partial class PropertyTypeModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -146,60 +149,6 @@ namespace API.Migrations
                         });
                 });
 
-            modelBuilder.Entity("API.Models.Property", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AppUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<double>("Area")
-                        .HasColumnType("float");
-
-                    b.Property<int?>("BathRooms")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("BedRooms")
-                        .HasColumnType("int");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsAvailable")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsRental")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("TypeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
-
-                    b.HasIndex("TypeId");
-
-                    b.ToTable("Property");
-                });
-
             modelBuilder.Entity("API.Models.PropertyType", b =>
                 {
                     b.Property<int>("Id")
@@ -220,146 +169,6 @@ namespace API.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("PropertyTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CategoryId = 1,
-                            Name = "Apartment"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CategoryId = 1,
-                            Name = "{Villa}"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CategoryId = 1,
-                            Name = "Palace"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CategoryId = 1,
-                            Name = "House"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CategoryId = 2,
-                            Name = "Company"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CategoryId = 2,
-                            Name = "Supermarket"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CategoryId = 2,
-                            Name = "Hotel"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CategoryId = 2,
-                            Name = "Showroom"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CategoryId = 2,
-                            Name = "Office"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CategoryId = 3,
-                            Name = "Residential Land"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            CategoryId = 3,
-                            Name = "Commercial Land"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            CategoryId = 3,
-                            Name = "Industrial Land"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            CategoryId = 3,
-                            Name = "Agricultural Land"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            CategoryId = 4,
-                            Name = "Mansions"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            CategoryId = 4,
-                            Name = "Beachfront Properties"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            CategoryId = 4,
-                            Name = "Gated Communities"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            CategoryId = 5,
-                            Name = "Factories"
-                        },
-                        new
-                        {
-                            Id = 18,
-                            CategoryId = 5,
-                            Name = "Warehouses"
-                        },
-                        new
-                        {
-                            Id = 19,
-                            CategoryId = 5,
-                            Name = "Cold Storage"
-                        },
-                        new
-                        {
-                            Id = 20,
-                            CategoryId = 5,
-                            Name = "Distribution Centers"
-                        },
-                        new
-                        {
-                            Id = 21,
-                            CategoryId = 6,
-                            Name = "Farms"
-                        },
-                        new
-                        {
-                            Id = 22,
-                            CategoryId = 6,
-                            Name = "Ranches"
-                        },
-                        new
-                        {
-                            Id = 23,
-                            CategoryId = 6,
-                            Name = "Orchards"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -532,55 +341,6 @@ namespace API.Migrations
                     b.Navigation("RefreshTokens");
                 });
 
-            modelBuilder.Entity("API.Models.Property", b =>
-                {
-                    b.HasOne("API.Models.AppUser", "AppUser")
-                        .WithMany("Properties")
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Models.PropertyType", "Type")
-                        .WithMany()
-                        .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.OwnsMany("API.Models.Image", "Images", b1 =>
-                        {
-                            b1.Property<int>("PropertyId")
-                                .HasColumnType("int");
-
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int");
-
-                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
-
-                            b1.Property<bool>("IsMain")
-                                .HasColumnType("bit");
-
-                            b1.Property<string>("Url")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("PropertyId", "Id");
-
-                            b1.ToTable("Image");
-
-                            b1.WithOwner("Property")
-                                .HasForeignKey("PropertyId");
-
-                            b1.Navigation("Property");
-                        });
-
-                    b.Navigation("AppUser");
-
-                    b.Navigation("Images");
-
-                    b.Navigation("Type");
-                });
-
             modelBuilder.Entity("API.Models.PropertyType", b =>
                 {
                     b.HasOne("API.Models.Category", "Category")
@@ -641,11 +401,6 @@ namespace API.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("API.Models.AppUser", b =>
-                {
-                    b.Navigation("Properties");
                 });
 
             modelBuilder.Entity("API.Models.Category", b =>

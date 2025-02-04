@@ -10,5 +10,6 @@ namespace API.Models
         [MaxLength(100)]
         public string LastName { get; set; }
         public List<RefreshToken>? RefreshTokens { get; set; }
+        public List<Property>? Properties { get; set; }
     }
 }
