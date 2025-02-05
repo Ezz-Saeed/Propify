@@ -8,7 +8,11 @@ namespace API.Helpers
     {
         public MappingProfile()
         {
-            CreateMap<PropertyDto, Property>();
+            CreateMap<AddPropertyDto, Property>();
+            CreateMap<Property, GetPropertiesDto>()
+                .ForMember(d=>d.TypeName, opt=>opt.MapFrom(s=>s.Type.Name))
+                .ForMember(d => d.CategoryName, opt => opt.MapFrom(s => s.Type.Category.Name))
+                .ForMember(d => d.OwnerName, opt => opt.MapFrom<UserNameResolver>());
         }
     }
 }

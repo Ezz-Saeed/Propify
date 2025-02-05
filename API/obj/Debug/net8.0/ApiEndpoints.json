@@ -51,10 +51,20 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "API.DTOs.PropertyDto",
+        "Type": "API.DTOs.AddPropertyDto",
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "API.Controllers.PropertiesController",
+    "Method": "GetAllProperties",
+    "RelativePath": "api/Properties/properties",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {

@@ -140,7 +140,7 @@ namespace API.Services
 
             var claims = new List<Claim>()
             {
-                new Claim(JwtRegisteredClaimNames.Name, appUser.UserName!),
+                new Claim(JwtRegisteredClaimNames.UniqueName, appUser.UserName!),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, appUser.Email!),
                 new Claim(JwtRegisteredClaimNames.NameId, appUser.Id)

@@ -12,11 +12,11 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PropertiesController(IUnitOfWork unitOfWork, IMapper mapper,UserManager<AppUser> userManager) : ControllerBase
     {
-        [HttpPost("addPropert")]
-        [Authorize]
-        public async Task<IActionResult> AddProperty(PropertyDto dto)
+        [HttpPost("addPropert")]      
+        public async Task<IActionResult> AddProperty(AddPropertyDto dto)
         {
             if(!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -38,6 +38,14 @@ namespace API.Controllers
             }
             
             return Ok(property);
+        }
+
+        [HttpGet("properties")]
+        public async Task<IActionResult> GetAllProperties()
+        {
+            var properties = await unitOfWork.Properies.GetAllAsync("Type", "Type.Category");
+            var propertiesToReturn = mapper.Map<List<GetPropertiesDto>>(properties);
+            return Ok(propertiesToReturn);
         }
     }
 }

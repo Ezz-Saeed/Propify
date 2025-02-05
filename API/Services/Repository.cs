@@ -1,5 +1,6 @@
 ﻿using API.Data;
 using API.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Services
 {
@@ -9,6 +10,19 @@ namespace API.Services
         {
             context.Set<T>().Add(entity);
             return entity;
+        }
+
+        public async Task<IReadOnlyList<T>> GetAllAsync(params string[]? eagers)
+        {
+            IQueryable<T> values = context.Set<T>();
+            if(eagers is not null && eagers.Length > 0)
+            {
+                foreach(var eager in eagers)
+                {
+                    values = values.Include(eager);
+                }
+            }
+            return await values.ToListAsync();
         }
     }
 }
