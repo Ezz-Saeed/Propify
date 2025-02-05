@@ -143,6 +143,7 @@ namespace API.Services
                 new Claim(JwtRegisteredClaimNames.Sub, appUser.UserName!),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, appUser.Email!),
+                new Claim(JwtRegisteredClaimNames.NameId, appUser.Id)
             }.Union(userClaims).Union(roleClaims);
 
             var signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key));
