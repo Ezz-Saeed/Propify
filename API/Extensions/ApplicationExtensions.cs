@@ -26,6 +26,7 @@ namespace API.Extensions
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
             return services;
         }

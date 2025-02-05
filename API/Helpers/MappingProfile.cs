@@ -8,8 +8,7 @@ namespace API.Helpers
     {
         public MappingProfile()
         {
-            CreateMap<PropertyDto, Property>().
-                ForMember(d=>d.AppUserId, options=>options.MapFrom<AppUserIdResolver>());
+            CreateMap<PropertyDto, Property>();
         }
     }
 }

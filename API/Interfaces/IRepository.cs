@@ -2,6 +2,6 @@
 {
     public interface IRepository<T> where T : class
     {
-        T CreateAsync(T entity);
+        T Create(T entity);
     }
 }

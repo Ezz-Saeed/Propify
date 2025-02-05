@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace API.Models
 {
@@ -21,6 +22,7 @@ namespace API.Models
         public PropertyType Type { get; set; }
         [ForeignKey(nameof(AppUser))]
         public string AppUserId { get; set; }
+        [JsonIgnore]
         public AppUser AppUser { get; set; }
         public ICollection<Image>? Images { get; set; }
     }
