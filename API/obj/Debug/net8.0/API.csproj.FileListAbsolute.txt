@@ -265,3 +265,4 @@ E:\Projects\Propify\API\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.
 E:\Projects\Propify\API\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Security.Cryptography.ProtectedData.dll
 E:\Projects\Propify\API\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll
 E:\Projects\Propify\API\obj\Debug\net8.0\API.sourcelink.json
+E:\Projects\Propify\API\bin\Debug\net8.0\AutoMapper.dll
