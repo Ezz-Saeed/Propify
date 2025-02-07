@@ -23,6 +23,14 @@ namespace API.Extensions
                 options.UseSqlServer(configuration.GetConnectionString("connection"));
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("PropifyPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowCredentials().AllowAnyMethod().WithOrigins("http://localhost:4200");
+                });
+            });
+
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
