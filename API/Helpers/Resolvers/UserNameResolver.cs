@@ -4,9 +4,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
-namespace API.Helpers
+namespace API.Helpers.Resolvers
 {
-    public class UserNameResolver(IHttpContextAccessor httpContextAccessor) 
+    public class UserNameResolver(IHttpContextAccessor httpContextAccessor)
         : IValueResolver<Property, GetPropertiesDto, string>
     {
         public string Resolve(Property source, GetPropertiesDto destination, string destMember, ResolutionContext context)

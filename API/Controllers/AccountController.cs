@@ -1,16 +1,45 @@
 ﻿using API.DTOs;
+using API.Extensions;
 using API.Interfaces;
+using API.Models;
 using API.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController(IAuthService authenticationService) : ControllerBase
+    public class AccountController(IAuthService authenticationService, UserManager<AppUser> userManager) : ControllerBase
     {
+
+        [HttpGet("loadCurrentUser")]
+        [Authorize]
+        public async Task<IActionResult> LoadCurrentUser()
+        {
+            var user = await authenticationService.LoadCurrentUser(User.GetUserId());
+            if(user is null) return Unauthorized("Unauthorized user!");
+            var roles = await userManager.GetRolesAsync(user);
+            var jwtToken = await authenticationService.GenerateToken(user);
+            var userDto = new UserDto
+            {
+                Username = user.UserName,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Roles = roles.ToList(),
+                Token = new JwtSecurityTokenHandler().WriteToken(jwtToken),
+                ExpiresOn = jwtToken.ValidTo,
+                IsAuthenticated = true
+            };
+
+            return Ok(userDto);
+        }
+
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto model)
         {

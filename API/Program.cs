@@ -36,6 +36,7 @@ namespace API
                 app.UseSwaggerUI();
             }
 
+            app.UseCors("PropifyPolicy");
             app.UseHttpsRedirection();
 
             app.UseAuthorization();

@@ -1,8 +1,8 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace API.DTOs
 {
-    public class AuthDto
+    public class UserDto
     {
         public string Username { get; set; }
         public string Email { get; set; }
@@ -12,10 +12,5 @@ namespace API.DTOs
         public string Token { get; set; }
         public DateTime ExpiresOn { get; set; }
         public bool IsAuthenticated { get; set; }
-        public string Message { get; set; }
-
-        [JsonIgnore]
-        public string? RefreshToken { get; set; }
-        public DateTime RefreshTokenExpiration { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using API.Helpers;
 using API.Interfaces;
 using API.Models;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -127,8 +128,15 @@ namespace API.Services
             return authModel;
         }
 
+        public async Task<AppUser> LoadCurrentUser(string userId)
+        {
+            if (string.IsNullOrEmpty(userId)) return null!;
+            var user = await userManager.FindByIdAsync(userId);
+            if (user is null) return null!;
+            return user;
+        }
 
-        private async Task<JwtSecurityToken> GenerateToken(AppUser appUser)
+        public async Task<JwtSecurityToken> GenerateToken(AppUser appUser)
         {
             var userClaims = await userManager.GetClaimsAsync(appUser);
             var roles = await userManager.GetRolesAsync(appUser);
@@ -173,5 +181,7 @@ namespace API.Services
                 ExpiresOn = DateTime.UtcNow.AddDays(3),
             };
         }
+
+        
     }
 }
