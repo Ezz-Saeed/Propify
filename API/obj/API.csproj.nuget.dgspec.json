@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Projects\\Propify\\api\\API.csproj": {}
+    "E:\\Projects\\Propify\\API\\API.csproj": {}
   },
   "projects": {
-    "E:\\Projects\\Propify\\api\\API.csproj": {
+    "E:\\Projects\\Propify\\API\\API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Projects\\Propify\\api\\API.csproj",
+        "projectUniqueName": "E:\\Projects\\Propify\\API\\API.csproj",
         "projectName": "API",
-        "projectPath": "E:\\Projects\\Propify\\api\\API.csproj",
+        "projectPath": "E:\\Projects\\Propify\\API\\API.csproj",
         "packagesPath": "C:\\Users\\start\\.nuget\\packages\\",
-        "outputPath": "E:\\Projects\\Propify\\api\\obj\\",
+        "outputPath": "E:\\Projects\\Propify\\API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\start\\AppData\\Roaming\\NuGet\\NuGet.Config",
