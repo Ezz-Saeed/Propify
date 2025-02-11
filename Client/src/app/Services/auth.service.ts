@@ -14,8 +14,8 @@ export class AuthService {
   refreshToken?:string;
   constructor(private http:HttpClient, ) { }
 
-  logIn(email:string,password:string){
-    return this.http.post<IAuthUser>(`${this.baseUrl}/getToken`,{email:email, password: password},
+  logIn(model:any){
+    return this.http.post<IAuthUser>(`${this.baseUrl}/getToken`,model,
       {withCredentials:true}).pipe(
       map((res:IAuthUser)=>{
         this.loadCurrentUser(res)

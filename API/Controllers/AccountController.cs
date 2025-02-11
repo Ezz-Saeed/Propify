@@ -60,7 +60,7 @@ namespace API.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var result = await authenticationService.GetTokenAsync(model);
-            if (!result.IsAuthenticated) return BadRequest(result.Message);
+            if (!result.IsAuthenticated) return Unauthorized(result.Message);
 
             if (!string.IsNullOrEmpty(result.RefreshToken))
                 SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiration);

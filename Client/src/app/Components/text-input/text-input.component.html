@@ -1,0 +1,9 @@
+
+<div class="form-group">
+  <input [formControl]="control" type="{{type}}" class="form-control" placeholder="{{label}}"
+  [class.is-invalid]="control.touched && control.invalid">
+
+  <div *ngIf="control.hasError('required')" class="invalid-feedback">
+    {{label}} field is required.
+  </div>
+</div>
