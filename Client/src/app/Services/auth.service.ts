@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { map, ReplaySubject } from 'rxjs';
 import { IAuthUser } from '../Models/auth.user';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { IUser } from '../Models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +19,18 @@ export class AuthService {
       map((res:IAuthUser)=>{
         this.loadCurrentUser(res)
         return res;
+      })
+    )
+  }
+
+  register(model:any){
+    return this.http.post<IAuthUser>(`${this.baseUrl}/register`, model,
+      {withCredentials:true}).pipe(
+      map(user=>{
+        if(user){
+          this.loadCurrentUser(user);
+        }
+        return user;
       })
     )
   }
