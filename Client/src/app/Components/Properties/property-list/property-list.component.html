@@ -1,0 +1,27 @@
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">Available Properties</h2>
+
+  <div class="row">
+    <div *ngFor="let property of properties" class="col-lg-4 col-md-6 col-sm-12 mb-4">
+      <div class="card shadow-sm h-100">
+        <img src="https://via.placeholder.com/300" class="card-img-top" alt="Property Image" />
+        <div class="card-body">
+          <h5 class="card-title"><strong>${{ property.price | number }}</strong></h5>
+          <p class="card-text"> {{ property.bedRooms ?? 'N/A' }} bds |
+             {{ property.bathRooms ?? 'N/A' }} ba | {{ property.area }} sq.ft</p>
+          <p class="card-text">{{ property.address }}, {{ property.city }}</p>
+          <!-- <p class="card-text">{{ property.description }}</p>
+          <p class="card-text"><strong>Type:</strong> {{ property.typeName }} | {{ property.categoryName }}</p>
+          <p class="card-text"><strong>Price:</strong> ${{ property.price | number }}</p>
+          <p class="card-text"><strong>Bedrooms:</strong> {{ property.bedRooms ?? 'N/A' }} |
+            <strong>Bathrooms:</strong> {{ property.bathRooms ?? 'N/A' }}</p>
+          <p class="card-text"><strong>Area:</strong> {{ property.area }} sq.ft</p> -->
+          <span class="badge" [ngClass]="{'bg-success': property.isAvailable, 'bg-danger': !property.isAvailable}">
+            {{ property.isAvailable ? 'Available' : 'Sold Out' }}
+          </span>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>

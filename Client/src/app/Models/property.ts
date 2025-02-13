@@ -1,3 +1,4 @@
+import { IPhoto } from "./photo";
 
 export interface IProperty {
   description: string;
@@ -9,6 +10,7 @@ export interface IProperty {
   area: number;
   isAvailable: boolean;
   isRental: boolean;
+  photos?:IPhoto[]
 
 }
 

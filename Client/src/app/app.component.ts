@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   token = localStorage.getItem('token');
   constructor(private authService:AuthService, private propertiesService:PropertiesService){}
   ngOnInit(): void {
-    this.loadproperties();
+    // this.loadproperties();
     // this.loadCurrentUserUsingToken();
   }
 
