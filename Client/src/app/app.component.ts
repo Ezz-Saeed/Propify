@@ -22,9 +22,9 @@ export class AppComponent implements OnInit {
     if(this.token){
       this.authService.loadCurrentUserUsingToken(this.token).subscribe({
         next:res=>{
-          console.log(res)
+          // console.log(res)
         },
-        error:err=>console.log(err)
+        // error:err=>console.log(err)
       })
     }
   }

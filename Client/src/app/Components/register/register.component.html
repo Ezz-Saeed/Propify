@@ -29,7 +29,9 @@
               <div  class="form-outline form-white mb-4">
                 <app-text-input [type]="'text'" [label]="'User Name'" formControlName="userName"></app-text-input>
               </div>
-
+              <div *ngIf="errorMessage" class="text-danger my-3">
+                {{ errorMessage }}
+              </div>
               <button (click)="register()"
               class="btn btn-outline-light btn px-5" [disabled]="registerForm.invalid"
               type="submit">Register</button>

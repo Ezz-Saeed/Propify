@@ -14,8 +14,11 @@
                 <app-text-input [label]="'Email'" [type]="'email'" formControlName="email"></app-text-input>
               </div>
 
-              <div data-mdb-input-init class="form-outline form-white mb-4">
+              <div class="form-outline form-white mb-4">
                 <app-text-input [label]="'Password'" [type]="'password'"  formControlName="password"></app-text-input>
+              </div>
+              <div *ngIf="errorMessage" class="text-danger my-3">
+                {{ errorMessage }}
               </div>
               <button (click)="login()"
               class="btn btn-outline-light btn px-5" [disabled]="loginForm.invalid"

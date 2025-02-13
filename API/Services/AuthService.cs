@@ -23,7 +23,7 @@ namespace API.Services
         {
             if (await userManager.FindByEmailAsync(model.Email) is not null ||
                 await userManager.FindByNameAsync(model.UserName) is not null)
-                return new AuthDto { Message = "Already authenticate user" };
+                return new AuthDto { Message = "Already registered account!" };
             var user = new AppUser
             {
                 UserName = model.UserName,
@@ -50,7 +50,9 @@ namespace API.Services
                 Roles = new List<string> { "User" },
                 IsAuthenticated = true,
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
-                ExpiresOn = token.ValidTo
+                ExpiresOn = token.ValidTo,
+                FirstName = user.FirstName,
+                LastName = user.LastName
             };
 
         }
@@ -62,7 +64,7 @@ namespace API.Services
             var user = await userManager.FindByEmailAsync(model.Email);
             if (user is null || !await userManager.CheckPasswordAsync(user, model.Password))
             {
-                authModel.Message = "Incorrect email or password";
+                authModel.Message = "Invalid email or password!";
                 return authModel;
             }
             var token = await GenerateToken(user);
@@ -73,6 +75,8 @@ namespace API.Services
             authModel.Roles = roles.ToList();
             authModel.Token = new JwtSecurityTokenHandler().WriteToken(token);
             authModel.ExpiresOn = token.ValidTo.ToLocalTime();
+            authModel.FirstName = user.FirstName;
+            authModel.LastName = user.LastName;
             authModel.IsAuthenticated = true;
 
             if (user.RefreshTokens.Any(t => t.IsActive))

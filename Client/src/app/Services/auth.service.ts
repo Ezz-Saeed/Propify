@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { map, ReplaySubject } from 'rxjs';
+import { catchError, map, ReplaySubject, throwError } from 'rxjs';
 import { IAuthUser } from '../Models/auth.user';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +11,7 @@ export class AuthService {
   currentUserSource = new ReplaySubject<IAuthUser | null>(1);
   currentUser$ = this.currentUserSource.asObservable();
   refreshToken?:string;
+  errorMessage: string | null = null;
   constructor(private http:HttpClient, ) { }
 
   logIn(model:any){
@@ -18,8 +19,10 @@ export class AuthService {
       {withCredentials:true}).pipe(
       map((res:IAuthUser)=>{
         this.loadCurrentUser(res)
+        this.errorMessage = null
         return res;
-      })
+      }),
+      catchError(this.handleError.bind(this))
     )
   }
 
@@ -31,7 +34,8 @@ export class AuthService {
           this.loadCurrentUser(user);
         }
         return user;
-      })
+      }),
+      catchError(this.handleError.bind(this))
     )
   }
 
@@ -65,5 +69,16 @@ export class AuthService {
         return user;
       })
     )
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // Client-side error
+      this.errorMessage = 'A network error occurred. Please try again.';
+    } else {
+      // Server-side error
+      this.errorMessage = error.error.message || 'Error! Check your inputs.';
+    }
+    return throwError(() => new Error(this.errorMessage!));
   }
 }

@@ -3,15 +3,17 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { AuthService } from '../../Services/auth.service';
 import { Router } from '@angular/router';
 import { TextInputComponent } from "../text-input/text-input.component";
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule, ReactiveFormsModule, TextInputComponent],
+  imports: [FormsModule, ReactiveFormsModule, TextInputComponent,CommonModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
 export class RegisterComponent implements OnInit {
   registerForm!:FormGroup;
+  errorMessage: string | null = null;
   constructor(private fb:FormBuilder,private authService:AuthService,
      private router:Router){}
   ngOnInit(): void {
@@ -31,10 +33,12 @@ export class RegisterComponent implements OnInit {
   register(){
     this.authService.register(this.registerForm.value).subscribe({
       next:res=>{
-        console.log(res)
+        // console.log(res)
         this.router.navigateByUrl('/')
       },
-      error:err=>console.log(err)
+      error:err=>{
+        this.errorMessage = err.message
+      }
     })
   }
 
