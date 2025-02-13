@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { catchError, map, ReplaySubject, throwError } from 'rxjs';
 import { IAuthUser } from '../Models/auth.user';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { Environment } from '../Environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  baseUrl = 'http://localhost:5269/api/Account';
+  baseUrl = `${Environment.API_URL}/Account`;
   currentUserSource = new ReplaySubject<IAuthUser | null>(1);
   currentUser$ = this.currentUserSource.asObservable();
   refreshToken?:string;
