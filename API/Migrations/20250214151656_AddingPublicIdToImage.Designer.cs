@@ -4,6 +4,7 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250214151656_AddingPublicIdToImage")]
+    partial class AddingPublicIdToImage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,7 +114,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
 
                     b.HasData(
                         new
@@ -197,7 +200,7 @@ namespace API.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("Property", (string)null);
+                    b.ToTable("Property");
                 });
 
             modelBuilder.Entity("API.Models.PropertyType", b =>
@@ -219,7 +222,7 @@ namespace API.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("PropertyTypes", (string)null);
+                    b.ToTable("PropertyTypes");
 
                     b.HasData(
                         new
@@ -497,7 +500,7 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.AppUser", b =>
                 {
-                    b.OwnsMany("API.Models.AppUser.RefreshTokens#API.Models.RefreshToken", "RefreshTokens", b1 =>
+                    b.OwnsMany("API.Models.RefreshToken", "RefreshTokens", b1 =>
                         {
                             b1.Property<string>("AppUserId")
                                 .HasColumnType("nvarchar(450)");
@@ -523,7 +526,7 @@ namespace API.Migrations
 
                             b1.HasKey("AppUserId", "Id");
 
-                            b1.ToTable("RefreshToken", (string)null);
+                            b1.ToTable("RefreshToken");
 
                             b1.WithOwner()
                                 .HasForeignKey("AppUserId");
@@ -546,7 +549,7 @@ namespace API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsMany("API.Models.Property.Images#API.Models.Image", "Images", b1 =>
+                    b.OwnsMany("API.Models.Image", "Images", b1 =>
                         {
                             b1.Property<int>("PropertyId")
                                 .HasColumnType("int");
@@ -569,7 +572,7 @@ namespace API.Migrations
 
                             b1.HasKey("PropertyId", "Id");
 
-                            b1.ToTable("Image", (string)null);
+                            b1.ToTable("Image");
 
                             b1.WithOwner("Property")
                                 .HasForeignKey("PropertyId");

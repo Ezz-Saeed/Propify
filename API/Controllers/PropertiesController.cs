@@ -13,7 +13,8 @@ namespace API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class PropertiesController(IUnitOfWork unitOfWork, IMapper mapper,UserManager<AppUser> userManager) : ControllerBase
+    public class PropertiesController(IUnitOfWork unitOfWork, IMapper mapper,
+        UserManager<AppUser> userManager, IImageService imageService) : ControllerBase
     {
         [HttpPost("addPropert")]      
         public async Task<IActionResult> AddProperty(AddPropertyDto dto)
@@ -43,9 +44,33 @@ namespace API.Controllers
         [HttpGet("properties")]
         public async Task<IActionResult> GetAllProperties()
         {
-            var properties = await unitOfWork.Properies.GetAllAsync("Type", "Type.Category");
+            var properties = await unitOfWork.Properies.GetAllAsync("Type", "Type.Category", "Images");
             var propertiesToReturn = mapper.Map<List<GetPropertiesDto>>(properties);
             return Ok(propertiesToReturn);
+        }
+
+        [HttpPost("uploadImage/{propertyId}")]
+        public async Task<IActionResult> UploadImage(IFormFile file, int propertyId)
+        {
+            //var user = await userManager.FindByEmailAsync(User.GetUserEmail());
+            var property = await unitOfWork.Properies.FindAsync(propertyId, "Images");
+
+            var result = await imageService.UploadImageAsync(file);
+            if(result.Error is not null) return BadRequest(new {Message= result.Error.Message});
+
+            Image image = new()
+            {
+                Url = result.SecureUrl.AbsoluteUri,
+                PublicId = result.PublicId,
+            };
+            if(property.Images!.Count == 0)
+                image.IsMain = true;
+            property.Images.Add(image);
+            unitOfWork.Properies.Update(property);
+            if (!await unitOfWork.Dispose())
+                return BadRequest(new { Message = "Couldn't upload image!" });
+
+            return Ok(mapper.Map<ImageDto>(image));
         }
     }
 }

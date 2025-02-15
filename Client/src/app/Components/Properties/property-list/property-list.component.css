@@ -1,0 +1,10 @@
+
+
+.card{
+  max-height: 370px;
+  max-width: 370px;
+}
+
+.card-img-top{
+  max-height: 200px;
+}

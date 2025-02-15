@@ -11,10 +11,13 @@ export interface IProperty {
   isAvailable: boolean;
   isRental: boolean;
   photos?:IPhoto[]
+  imageUrl?:string
 
 }
 
 export class IGetPropery implements IProperty{
+  photos?: IPhoto[] | undefined;
+  imageUrl?: string;
   description!: string;
   address!: string;
   city!: string;

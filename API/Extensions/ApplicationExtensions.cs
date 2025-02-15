@@ -31,10 +31,12 @@ namespace API.Extensions
                 });
             });
 
+            services.Configure<CloudinarySettings>(configuration.GetSection("CloudinarySettings"));
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper(typeof(MappingProfile).Assembly);
+            services.AddScoped<IImageService, ImageService>();
 
             return services;
         }

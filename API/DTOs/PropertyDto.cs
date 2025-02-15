@@ -19,6 +19,7 @@ namespace API.DTOs
         public double Area { get; set; }
         public bool IsAvailable { get; set; }
         public bool IsRental { get; set; }
+        public string? ImageUrl { get; set; }
               //public string AppUserId { get; set; }
     }
 }

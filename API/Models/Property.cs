@@ -19,11 +19,14 @@ namespace API.Models
         public bool IsRental { get; set; }
         [ForeignKey(nameof(Type))]
         public int TypeId { get; set; }
+        [JsonIgnore]
         public PropertyType Type { get; set; }
         [ForeignKey(nameof(AppUser))]
         public string AppUserId { get; set; }
         [JsonIgnore]
         public AppUser AppUser { get; set; }
-        public ICollection<Image>? Images { get; set; }
+        public string ImageUrl => Images?.FirstOrDefault(i => i.IsMain)?.Url ?? string.Empty;
+        [JsonIgnore]
+        public ICollection<Image> Images { get; set; } 
     }
 }

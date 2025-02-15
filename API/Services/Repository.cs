@@ -1,6 +1,7 @@
 ﻿using API.Data;
 using API.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace API.Services
 {
@@ -10,6 +11,18 @@ namespace API.Services
         {
             context.Set<T>().Add(entity);
             return entity;
+        }
+
+        public async Task<T> FindAsync(int id, params string[]? eagers)
+        {
+            IQueryable<T> query = context.Set<T>();
+            if(eagers is not null && eagers.Length > 0)
+            {
+                foreach(var eager in eagers)
+                     query = query.Include(eager);
+            }
+
+           return await query.FirstOrDefaultAsync();
         }
 
         public async Task<IReadOnlyList<T>> GetAllAsync(params string[]? eagers)
@@ -23,6 +36,16 @@ namespace API.Services
                 }
             }
             return await values.ToListAsync();
+        }
+
+        public void DeleteAsync(T entity)
+        {
+            context.Set<T>().Remove(entity);
+        }
+
+        public void Update(T entity)
+        {
+            context.Set<T>().Update(entity);
         }
     }
 }
