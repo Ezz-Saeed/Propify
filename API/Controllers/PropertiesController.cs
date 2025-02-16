@@ -5,6 +5,7 @@ using API.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -49,11 +50,20 @@ namespace API.Controllers
             return Ok(propertiesToReturn);
         }
 
+        [HttpGet("getProperty/{propertyId}")]
+        public async Task<IActionResult> GetPropertyWithId(int propertyId)
+        {
+            var property = await unitOfWork.Properies.FindAsync(p => p.Id == propertyId, "Type", "Type.Category", "Images");
+            if (property is null) return BadRequest(new { Message = "Invalid property ID!" });
+            //var propertyToReturn = 
+            return Ok(mapper.Map<GetPropertiesDto>(property));
+        }
+
         [HttpPost("uploadImage/{propertyId}")]
         public async Task<IActionResult> UploadImage(IFormFile file, int propertyId)
         {
             //var user = await userManager.FindByEmailAsync(User.GetUserEmail());
-            var property = await unitOfWork.Properies.FindAsync(propertyId, "Images");
+            var property = await unitOfWork.Properies.FindAsync(p=>p.Id==propertyId, "Images");
 
             var result = await imageService.UploadImageAsync(file);
             if(result.Error is not null) return BadRequest(new {Message= result.Error.Message});

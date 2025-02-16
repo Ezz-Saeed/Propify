@@ -13,7 +13,7 @@ namespace API.Services
             return entity;
         }
 
-        public async Task<T> FindAsync(int id, params string[]? eagers)
+        public async Task<T> FindAsync(Expression<Func<T, bool>> predicate, params string[]? eagers)
         {
             IQueryable<T> query = context.Set<T>();
             if(eagers is not null && eagers.Length > 0)
@@ -22,7 +22,7 @@ namespace API.Services
                      query = query.Include(eager);
             }
 
-           return await query.FirstOrDefaultAsync();
+           return await query.SingleOrDefaultAsync(predicate);
         }
 
         public async Task<IReadOnlyList<T>> GetAllAsync(params string[]? eagers)

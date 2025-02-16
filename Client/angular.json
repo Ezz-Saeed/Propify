@@ -31,7 +31,9 @@
               "node_modules/bootswatch/dist/flatly/bootstrap.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+             
+            ]
           },
           "configurations": {
             "production": {
