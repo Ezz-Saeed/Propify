@@ -20,6 +20,7 @@ namespace API.DTOs
         public bool IsAvailable { get; set; }
         public bool IsRental { get; set; }
         public string? ImageUrl { get; set; }
+        public ICollection<Image> Images { get; set; }
               //public string AppUserId { get; set; }
     }
 }

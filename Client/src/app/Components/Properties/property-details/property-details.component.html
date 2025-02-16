@@ -7,9 +7,13 @@
     <h3 class=" container text-center">Propify</h3>
 
   </div>
+  <span class="badge" [ngClass]="{'bg-success': property.isAvailable, 'bg-danger': !property.isAvailable}">
+    {{ property.isAvailable ? 'Available' : 'Sold Out' }}
+  </span>
+  <div class="row modal-body">
 
-  <div class="modal-body">
-    <img [src]="property.imageUrl" class="img-fluid rounded mb-3" alt="Property Image">
+     <ngx-gallery  [options]="galleryOptions" [images]="galleryImages"
+     style="display: inline-block;margin-bottom: 20px;"></ngx-gallery>
     <h5><strong>${{ property.price | number }}</strong></h5>
     <p class="card-text">{{ property.address }}, {{ property.city }}
       <strong class="mx-4">{{ property.bedRooms ?? 'N/A' }} bds |
@@ -21,9 +25,7 @@
       <p><strong>What's special:</strong></p>
       <p>{{ property.description }}</p>
     </div>
-    <span class="badge" [ngClass]="{'bg-success': property.isAvailable, 'bg-danger': !property.isAvailable}">
-      {{ property.isAvailable ? 'Available' : 'Sold Out' }}
-    </span>
+
   </div>
 
   <!-- <div class="modal-footer">
