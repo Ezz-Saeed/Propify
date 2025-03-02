@@ -17,8 +17,8 @@ namespace API.Controllers
     public class PropertiesController(IUnitOfWork unitOfWork, IMapper mapper,
         UserManager<AppUser> userManager, IImageService imageService) : ControllerBase
     {
-        [HttpPost("addPropert")]      
-        public async Task<IActionResult> AddProperty(AddPropertyDto dto)
+        [HttpPost("addProperty")]      
+        public async Task<IActionResult> AddProperty([FromForm]AddPropertyDto dto)
         {
             if(!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -26,6 +26,7 @@ namespace API.Controllers
             if(user is null) return Unauthorized("Unauthorized user!");
 
             var property = mapper.Map<Property>(dto);
+            
             user.Properties!.Add(property);
             var reult = await userManager.UpdateAsync(user);
 
@@ -38,8 +39,8 @@ namespace API.Controllers
                 }
                 return BadRequest(errors);
             }
-            
-            return Ok(property);
+            var propertyToReturn = mapper.Map<GetPropertiesDto>(property);
+            return Ok(propertyToReturn);
         }
 
         [HttpGet("properties")]
@@ -81,6 +82,13 @@ namespace API.Controllers
                 return BadRequest(new { Message = "Couldn't upload image!" });
 
             return Ok(mapper.Map<ImageDto>(image));
+        }
+
+        [HttpGet("types")]
+        public async Task<IActionResult> GetTypes()
+        {
+            var types = mapper.Map<List<TypeDto>>(await unitOfWork.Types.GetAllAsync("Category"));
+            return Ok(types);
         }
     }
 }

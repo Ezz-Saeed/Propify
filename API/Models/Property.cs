@@ -27,6 +27,6 @@ namespace API.Models
         public AppUser AppUser { get; set; }
         public string ImageUrl => Images?.FirstOrDefault(i => i.IsMain)?.Url ?? string.Empty;
         [JsonIgnore]
-        public ICollection<Image> Images { get; set; } 
+        public ICollection<Image>? Images { get; set; } 
     }
 }

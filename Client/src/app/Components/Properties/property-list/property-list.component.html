@@ -1,7 +1,7 @@
 <div class="container mt-4">
   <div class="row">
     <div *ngFor="let property of properties" class="col-lg-4 col-md-6 col-sm-12 mb-4">
-      <div class="card shadow-sm h-100" (click)="propertyDetails(property)">
+      <div class="card shadow-sm h-100" (click)="propertyDetails(property)" style="cursor: pointer;">
         <img src="{{property.imageUrl}}"  class="card-img-top" alt="Property Image" />
         <div class="card-body">
           <h5 class="card-title"><strong>${{ property.price | number }}</strong></h5>

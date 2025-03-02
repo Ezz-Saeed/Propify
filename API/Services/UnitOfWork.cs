@@ -11,9 +11,12 @@ namespace API.Services
         public UnitOfWork(AppDbContext context)
         {
             Properies = new Repository<Property>(context);
+            Types = new Repository<PropertyType>(context);
             this.context = context;
         }
         public IRepository<Property> Properies { get; private set; }
+
+        public IRepository<PropertyType> Types { get; private set; }
 
         public async Task<bool> Dispose()
         {

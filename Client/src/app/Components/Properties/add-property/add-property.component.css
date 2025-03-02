@@ -1,0 +1,32 @@
+.image-container {
+  position: relative;
+  display: inline-block;
+}
+
+.preview-img {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: white;
+  border: none;
+  /* border-radius: 50%; */
+  width: 20px;
+  height: 20px;
+  color: black;
+  font-size: 14px;
+  line-height: 18px;
+  text-align: center;
+  cursor: pointer;
+
+}
+
+/* .remove-btn:hover {
+  background: red;
+} */

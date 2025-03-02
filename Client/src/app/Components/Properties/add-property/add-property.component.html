@@ -1,0 +1,67 @@
+<div class="container mt-5">
+  <form [formGroup]="propertyForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <!-- Left Side: Form Inputs -->
+      <div class="col-md-6">
+        <div class="mb-2">
+          <app-text-input formControlName="description" [label]="'Description'"></app-text-input>
+        </div>
+        <div class="mb-2">
+          <app-text-input formControlName="address" [label]="'Address'"></app-text-input>
+        </div>
+        <div class="mb-2">
+          <app-text-input formControlName="city" [label]="'City'"></app-text-input>
+        </div>
+        <div class="mb-2">
+          <app-text-input formControlName="price" [label]="'Price'" [type]="'number'"></app-text-input>
+        </div>
+        <div class="mb-2">
+          <app-text-input formControlName="bedRooms" [label]="'Bedrooms'" [type]="'number'"></app-text-input>
+        </div>
+        <div class="mb-2">
+          <app-text-input formControlName="bathRooms" [label]="'Bathrooms'" [type]="'number'"></app-text-input>
+        </div>
+        <div class="mb-2">
+          <app-text-input formControlName="area" [label]="'Area (sq ft)'" [type]="'number'"></app-text-input>
+        </div>
+        <div class="mb-2">
+          <label>Is Rental?</label>
+          <select class="form-control" formControlName="isRental">
+            <option [value]="true">Yes</option>
+            <option [value]="false">No</option>
+          </select>
+        </div>
+        <div class="mb-2">
+          <label>Property Type</label>
+          <select class="form-control" formControlName="typeId">
+            <option *ngFor="let type of propertyTypes" [value]="type.id">{{ type.name }}</option>
+          </select>
+        </div>
+
+        <!-- Image Upload -->
+        <div class="mb-2">
+          <label>Upload Images</label>
+          <input type="file" (change)="onFileSelected($event)" multiple accept="image/*" class="form-control">
+        </div>
+      </div>
+
+      <!-- Right Side: Image Preview -->
+      <div class="col-md-6">
+        <div *ngIf="selectedImages.length > 0" class="d-flex flex-wrap">
+          <div *ngFor="let img of selectedImages; let i = index" class="p-2">
+            <div class="image-container">
+              <div>
+                <img [src]="img" class="img-thumbnail preview-img">
+              </div>
+              <button type="button" class="btn btn-danger btn-sm remove-btn" (click)="removeImage(i)">X</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3" [disabled]="propertyForm.invalid">
+      Submit Property
+    </button>
+  </form>
+</div>
