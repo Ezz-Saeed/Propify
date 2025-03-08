@@ -33,11 +33,12 @@ export class RegisterComponent implements OnInit {
   register(){
     this.authService.register(this.registerForm.value).subscribe({
       next:res=>{
-        // console.log(res)
-        this.router.navigateByUrl('/')
+        this.errorMessage = res.message
+        if(this.errorMessage === null)
+          this.router.navigateByUrl('/');
       },
       error:err=>{
-        this.errorMessage = err.message
+        console.log(err)
       }
     })
   }

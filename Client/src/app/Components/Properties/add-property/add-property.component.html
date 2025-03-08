@@ -47,8 +47,8 @@
 
       <!-- Right Side: Image Preview -->
       <div class="col-md-6">
-        <div *ngIf="selectedImages.length > 0" class="d-flex flex-wrap">
-          <div *ngFor="let img of selectedImages; let i = index" class="p-2">
+        <div *ngIf="previewImages.length > 0" class="d-flex flex-wrap">
+          <div *ngFor="let img of previewImages; let i = index" class="p-2">
             <div class="image-container">
               <div>
                 <img [src]="img" class="img-thumbnail preview-img">

@@ -15,17 +15,16 @@ export class AuthService {
   errorMessage: string | null = null;
   constructor(private http:HttpClient, ) { }
 
-  logIn(model:any){
-    return this.http.post<IAuthUser>(`${this.baseUrl}/getToken`,model,
-      {withCredentials:true}).pipe(
-      map((res:IAuthUser)=>{
-        this.loadCurrentUser(res)
-        this.errorMessage = null
+  logIn(model: any) {
+    return this.http.post<IAuthUser>(`${this.baseUrl}/getToken`, model, { withCredentials: true }).pipe(
+      map((res: IAuthUser) => {
+        this.loadCurrentUser(res);
+        this.errorMessage = res.message ?? null
         return res;
       }),
-      catchError(this.handleError.bind(this))
-    )
-  }
+    );
+}
+
 
   register(model:any){
     return this.http.post<IAuthUser>(`${this.baseUrl}/register`, model,
@@ -34,9 +33,10 @@ export class AuthService {
         if(user){
           this.loadCurrentUser(user);
         }
+        this.errorMessage = user.message ?? null
         return user;
       }),
-      catchError(this.handleError.bind(this))
+      // catchError(this.handleError.bind(this))
     )
   }
 
@@ -72,14 +72,21 @@ export class AuthService {
     )
   }
 
-  private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      // Client-side error
-      this.errorMessage = 'A network error occurred. Please try again.';
-    } else {
-      // Server-side error
-      this.errorMessage = error.error.message || 'Error! Check your inputs.';
-    }
-    return throwError(() => new Error(this.errorMessage!));
-  }
+//   private handleError(error: HttpErrorResponse) {
+//     let errorMsg = 'Error! Check your inputs.';
+
+//     if (error.error) {
+//       if (typeof error.error === 'string') {
+//         errorMsg = error.error; // In case the server returns a plain text error
+//       } else if (error.error.message) {
+//         errorMsg = error.error.message; // Extract message from JSON response
+//       }
+//     }
+
+//     console.error('Error:', errorMsg);
+//     return throwError(() => new Error(errorMsg));
+// }
+
+
+
 }

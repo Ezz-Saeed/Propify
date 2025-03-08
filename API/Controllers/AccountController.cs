@@ -6,6 +6,7 @@ using API.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
@@ -47,7 +48,7 @@ namespace API.Controllers
 
             var result = await authenticationService.RegisterAsync(model);
 
-            if (!result.IsAuthenticated) return BadRequest(new { Message = result.Message });
+            if (!result.IsAuthenticated) return Ok(result);
             if(!string.IsNullOrEmpty(result.RefreshToken))
                 SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiration);
 
@@ -55,12 +56,12 @@ namespace API.Controllers
         }
 
         [HttpPost("getToken")]
-        public async Task<IActionResult> GetTokenAsnc(LoginDto model)
+        public async Task<ActionResult> GetTokenAsnc(LoginDto model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var result = await authenticationService.GetTokenAsync(model);
-            if (!result.IsAuthenticated) return BadRequest(new { Message = result.Message });
+            if (!result.IsAuthenticated) return  Ok(result);
 
             if (!string.IsNullOrEmpty(result.RefreshToken))
                 SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiration);

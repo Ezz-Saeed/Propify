@@ -17,19 +17,17 @@ export class PropertiesService {
     return this.http.get<IGetPropery[]>(`${this.baseUrl}/properties`);
   }
 
-  addProperty(propertyForm: FormGroup) {
+  addProperty(propertyForm: FormGroup, images:File[]) {
     const formData = new FormData();
 
-    // Append all form values
     Object.keys(propertyForm.value).forEach((key) => {
       formData.append(key, propertyForm.value[key]);
     });
 
-    // Append images
-    if (propertyForm.value.images && propertyForm.value.images.length > 0) {
-      for (let file of propertyForm.value.images) {
+    if(images && images.length > 0){
+      images.forEach((file, index) => {
         formData.append('images', file);
-      }
+      });
     }
 
     return this.http.post<IGetPropery>(`${this.baseUrl}/addProperty`, formData);

@@ -7,7 +7,7 @@ export class IAuthUser{
   roles!:string[]
   token!:string
   isAuthenticated!:boolean
-  message?:string
+  message:string | null = null
   refreshTokenExpiration?:Date
   expiresOn!:Date
 }

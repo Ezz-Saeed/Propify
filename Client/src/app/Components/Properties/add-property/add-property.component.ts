@@ -13,8 +13,9 @@ import { PropertiesService } from '../../../Services/properties.service';
 })
 export class AddPropertyComponent implements OnInit {
   propertyForm!:FormGroup
-  selectedImages: string[] = [];
+  previewImages: string[] = [];
   propertyTypes: IType[] = []
+  selectedFiles: File[] = [];
 
   constructor(private fb:FormBuilder, private propertiesService:PropertiesService){}
   ngOnInit(): void {
@@ -46,12 +47,12 @@ export class AddPropertyComponent implements OnInit {
   }
 
   onFileSelected(event: any) {
-    if (event.target.files.length > 0) {
+    if (event.target.files) {
       for (let file of event.target.files) {
+        this.selectedFiles.push(file);
         const reader = new FileReader();
-        reader.onload = () => {
-          this.selectedImages.push(reader.result as string);
-          this.propertyForm.get('images')?.setValue(this.selectedImages);
+        reader.onload = (e: any) => {
+          this.previewImages.push(e.target.result);
         };
         reader.readAsDataURL(file);
       }
@@ -59,15 +60,15 @@ export class AddPropertyComponent implements OnInit {
   }
 
   removeImage(index: number) {
-    this.selectedImages.splice(index, 1);
-    this.propertyForm.get('images')?.setValue(this.selectedImages);
+    this.previewImages.splice(index, 1);
+    this.propertyForm.get('images')?.setValue(this.previewImages);
   }
 
   onSubmit() {
     if (this.propertyForm.valid) {
-      this.propertiesService.addProperty(this.propertyForm).subscribe({
+      this.propertiesService.addProperty(this.propertyForm, this.selectedFiles).subscribe({
         next: res=>{
-
+          // console.log(res)
         },
         error:err=>console.log(err)
       })

@@ -10,7 +10,8 @@ namespace API.Helpers
         public MappingProfile()
         {
             CreateMap<AddPropertyDto, Property>()
-                .ForMember(d=>d.Images, opt=>opt.MapFrom<ImagesResolver>());
+                .ForMember(d=>d.Images, opt=>opt.MapFrom<ImagesResolver>())
+                .ForMember(d=>d.IsAvailable, opt=>opt.MapFrom(x=>true));
 
             //CreateMap<AppUser, AuthDto>()
             //    .ForMember(d => d.Roles, opt => opt.MapFrom<UserRolesResolver>());
