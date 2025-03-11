@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace API.DTOs
+namespace API.DTOs.PropertyDtos
 {
     public class PropertyDto
     {
@@ -20,6 +20,6 @@ namespace API.DTOs
         public bool IsAvailable { get; set; }
         public bool IsRental { get; set; }
         public string? ImageUrl { get; set; }
-        
+
     }
 }

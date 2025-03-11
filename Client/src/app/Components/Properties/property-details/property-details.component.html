@@ -1,7 +1,7 @@
 <div class="container">
   <button type="button" class="btn-close mb-3 mt-3 d-block" (click)="close()" aria-label="Close"></button>
   <span class="badge" [ngClass]="{'bg-primary': !property.isRental, 'bg-secondary': property.isRental}">
-    {{ property.isAvailable ? 'For Sale' : 'For Rent' }}
+    {{ !property.isRental ? 'For Sale' : 'For Rent' }}
   </span>
   <div class="modal-header ">
     <h3 class=" container text-center">Propify</h3>

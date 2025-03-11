@@ -1,4 +1,5 @@
 ﻿using API.DTOs;
+using API.DTOs.AuthDtos;
 using API.Extensions;
 using API.Interfaces;
 using API.Models;
@@ -47,7 +48,7 @@ namespace API.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var result = await authenticationService.RegisterAsync(model);
-
+            
             if (!result.IsAuthenticated) return Ok(result);
             if(!string.IsNullOrEmpty(result.RefreshToken))
                 SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiration);

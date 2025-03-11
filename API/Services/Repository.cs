@@ -25,7 +25,7 @@ namespace API.Services
            return await query.SingleOrDefaultAsync(predicate);
         }
 
-        public async Task<IReadOnlyList<T>> GetAllAsync(params string[]? eagers)
+        public async Task<IReadOnlyList<T>> GetAllAsync(Expression<Func<T, bool>>? predicate, params string[]? eagers)
         {
             IQueryable<T> values = context.Set<T>();
             if(eagers is not null && eagers.Length > 0)
@@ -35,7 +35,7 @@ namespace API.Services
                     values = values.Include(eager);
                 }
             }
-            return await values.ToListAsync();
+            return await values.Where(predicate).ToListAsync();
         }
 
         public void DeleteAsync(T entity)

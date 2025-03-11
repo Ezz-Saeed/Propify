@@ -1,4 +1,4 @@
-﻿using API.DTOs;
+﻿using API.DTOs.AuthDtos;
 using API.Helpers;
 using API.Interfaces;
 using API.Models;

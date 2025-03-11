@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   constructor(private authService:AuthService, private propertiesService:PropertiesService){}
   ngOnInit(): void {
     // this.loadproperties();
-    this.loadCurrentUserUsingToken();
+    // this.loadCurrentUserUsingToken();
   }
 
   loadCurrentUserUsingToken(){

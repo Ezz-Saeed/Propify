@@ -1,4 +1,4 @@
-﻿using API.DTOs;
+﻿using API.DTOs.PropertyDtos;
 using API.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;

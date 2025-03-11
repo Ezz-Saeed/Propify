@@ -1,4 +1,4 @@
-﻿using API.DTOs;
+﻿using API.DTOs.AuthDtos;
 using API.Models;
 using System.IdentityModel.Tokens.Jwt;
 

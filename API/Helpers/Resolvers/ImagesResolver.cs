@@ -1,4 +1,4 @@
-﻿using API.DTOs;
+﻿using API.DTOs.PropertyDtos;
 using API.Interfaces;
 using API.Models;
 using API.Services;

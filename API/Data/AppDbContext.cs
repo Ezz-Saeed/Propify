@@ -1,4 +1,5 @@
 ﻿using API.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,7 +34,7 @@ namespace API.Data
 
             builder.Entity<PropertyType>().HasData(
                     new PropertyType { Id = 1, Name = "Apartment", CategoryId=1},
-                    new PropertyType { Id = 2, Name = "{Villa}", CategoryId = 1 },
+                    new PropertyType { Id = 2, Name = "Villa", CategoryId = 1 },
                     new PropertyType { Id = 3, Name = "Palace", CategoryId = 1 },
                     new PropertyType { Id = 4, Name = "House", CategoryId = 1 },
                     new PropertyType { Id = 5, Name = "Company" , CategoryId=2},
@@ -55,6 +56,12 @@ namespace API.Data
                     new PropertyType { Id = 21, Name = "Farms", CategoryId = 6 },
                     new PropertyType { Id = 22, Name = "Ranches", CategoryId = 6 },
                     new PropertyType { Id = 23, Name = "Orchards", CategoryId = 6 }
+                );
+
+            builder.Entity<IdentityRole>().HasData
+                (
+                    new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Owner", 
+                        NormalizedName = "Owner".ToUpper(),ConcurrencyStamp = Guid.NewGuid().ToString() }
                 );
 
         }

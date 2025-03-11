@@ -1,4 +1,4 @@
-﻿using API.DTOs;
+﻿using API.DTOs.PropertyDtos;
 using API.Extensions;
 using API.Interfaces;
 using API.Models;
@@ -28,6 +28,7 @@ namespace API.Controllers
             var property = mapper.Map<Property>(dto);
             
             user.Properties!.Add(property);
+            await userManager.AddToRolesAsync(user, ["Owner"]);
             var reult = await userManager.UpdateAsync(user);
 
             if(!reult.Succeeded)
@@ -43,10 +44,11 @@ namespace API.Controllers
             return Ok(propertyToReturn);
         }
 
+        [AllowAnonymous]
         [HttpGet("properties")]
         public async Task<IActionResult> GetAllProperties()
         {
-            var properties = await unitOfWork.Properies.GetAllAsync("Type", "Type.Category", "Images");
+            var properties = await unitOfWork.Properies.GetAllAsync(p=>true,"Type", "Type.Category", "Images");
             var propertiesToReturn = mapper.Map<List<GetPropertiesDto>>(properties);
             return Ok(propertiesToReturn);
         }
@@ -59,11 +61,19 @@ namespace API.Controllers
             //var propertyToReturn = 
             return Ok(mapper.Map<GetPropertiesDto>(property));
         }
+        [Authorize(Roles ="Owner")]
+        [HttpGet("ownerProperties")]
+        public async Task<IActionResult> GetPropertiesForOwner()
+        {
+            var userId = User.GetUserId();
+            var properties = await unitOfWork.Properies.GetAllAsync(p => p.AppUserId==userId, "Type", "Type.Category", "Images");
+            var propertiesToReturn = mapper.Map<List<GetPropertiesDto>>(properties);
+            return Ok(propertiesToReturn);
+        }
 
         [HttpPost("uploadImage/{propertyId}")]
         public async Task<IActionResult> UploadImage(IFormFile file, int propertyId)
         {
-            //var user = await userManager.FindByEmailAsync(User.GetUserEmail());
             var property = await unitOfWork.Properies.FindAsync(p=>p.Id==propertyId, "Images");
 
             var result = await imageService.UploadImageAsync(file);
@@ -87,7 +97,7 @@ namespace API.Controllers
         [HttpGet("types")]
         public async Task<IActionResult> GetTypes()
         {
-            var types = mapper.Map<List<TypeDto>>(await unitOfWork.Types.GetAllAsync("Category"));
+            var types = mapper.Map<List<TypeDto>>(await unitOfWork.Types.GetAllAsync(p => true, "Category"));
             return Ok(types);
         }
     }

@@ -1,4 +1,5 @@
-﻿using API.DTOs;
+﻿using API.DTOs.OwnerDtos;
+using API.DTOs.PropertyDtos;
 using API.Helpers.Resolvers;
 using API.Models;
 using AutoMapper;
@@ -21,6 +22,8 @@ namespace API.Helpers
             CreateMap<PropertyType, TypeDto>()
                 .ForMember(d=>d.CategoryName, opt=>opt.MapFrom(s=>s.Category.Name))
                 .ForMember(d => d.CategoryId, opt => opt.MapFrom(s => s.Category.Id));
+
+            CreateMap<Property, OwnerProperty>();
 
             CreateMap<Property, GetPropertiesDto>()
                 .ForMember(d=>d.TypeName, opt=>opt.MapFrom(s=>s.Type.Name))
