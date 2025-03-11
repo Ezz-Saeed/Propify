@@ -61,6 +61,8 @@ namespace API.Controllers
             //var propertyToReturn = 
             return Ok(mapper.Map<GetPropertiesDto>(property));
         }
+
+
         [Authorize(Roles ="Owner")]
         [HttpGet("ownerProperties")]
         public async Task<IActionResult> GetPropertiesForOwner()
@@ -71,6 +73,27 @@ namespace API.Controllers
             return Ok(propertiesToReturn);
         }
 
+        [Authorize(Roles = "Owner")]
+        [HttpPut("updateProperty/{id}")]
+        public async Task<ActionResult> UpdateProperty(int id, [FromForm] UpdatePropertyDto dto)
+        {
+            var property = await unitOfWork.Properies.FindAsync(p=>p.Id==id);
+            if(property is null) return BadRequest("Invalid property Id!");
+            property.Description = dto.Description;
+            property.Address = dto.Address;
+            property.Area = dto.Area;
+            property.BedRooms = dto.BedRooms;
+            property.BathRooms = dto.BathRooms;
+            property.City = dto.City; 
+            property.Price = dto.Price;
+            property.IsAvailable = dto.IsAvailable;
+            property.IsRental = dto.IsRental;
+            property.TypeId = dto.TypeId;
+            unitOfWork.Properies.Update(property);
+            await unitOfWork.Dispose();
+            return Ok(property);
+        }
+        [Authorize(Roles = "Owner")]
         [HttpPost("uploadImage/{propertyId}")]
         public async Task<IActionResult> UploadImage(IFormFile file, int propertyId)
         {
@@ -92,6 +115,23 @@ namespace API.Controllers
                 return BadRequest(new { Message = "Couldn't upload image!" });
 
             return Ok(mapper.Map<ImageDto>(image));
+        }
+
+        [Authorize(Roles = "Owner")]
+        [HttpDelete("deleteImage/{propertyId}")]
+        public async Task<IActionResult>DeleteImage(int propertyId,[FromQuery] string publicId)
+        {
+            var property = await unitOfWork.Properies.FindAsync(p=>p.Id==propertyId, "Images");
+            if (property is null) return NotFound();
+            if(property.Images?.Count == 0) return BadRequest("No images");
+            var image = property.Images!.FirstOrDefault(p=>p.PublicId== publicId);
+            if(image is  null) return NotFound();
+            var result = await imageService.DeleteImageAsync(image.PublicId!);
+            if(result.Error is not null) return BadRequest(result.Error.Message);
+            property.Images!.Remove(image);
+            unitOfWork.Properies.Update(property);
+            await unitOfWork.Dispose();
+            return Ok();
         }
 
         [HttpGet("types")]
