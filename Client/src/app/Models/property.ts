@@ -13,10 +13,12 @@ export interface IProperty {
   images?:IPhoto[]
   imageUrl?:string
   id:number
+  typeId:number
 }
 
 export class IGetPropery implements IProperty{
   id!:number
+  typeId!:number
   images!: IPhoto[];
   imageUrl?: string;
   description!: string;

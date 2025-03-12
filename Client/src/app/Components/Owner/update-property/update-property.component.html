@@ -1,26 +1,35 @@
-<div class="container mt-5">
-  <form [formGroup]="propertyForm" (ngSubmit)="onSubmit()">
-    <div class="row">
-      <div class="col-md-6">
+<div class="container mt-5 mb-5">
+  <button type="button" class="btn-close mb-3 mt-3 d-block" (click)="close()" aria-label="Close"></button>
+  <div class="row">
+    <!-- Left Column: Form (6 cols) -->
+    <div class="col-md-6">
+      <form [formGroup]="propertyForm" (ngSubmit)="saveProperty()">
         <div class="mb-2">
+          <label>Wht's special?</label>
           <app-text-input formControlName="description" [label]="'Description'"></app-text-input>
         </div>
         <div class="mb-2">
+          <label>Address</label>
           <app-text-input formControlName="address" [label]="'Address'"></app-text-input>
         </div>
         <div class="mb-2">
+          <label>City</label>
           <app-text-input formControlName="city" [label]="'City'"></app-text-input>
         </div>
         <div class="mb-2">
+          <label>Price</label>
           <app-text-input formControlName="price" [label]="'Price'" [type]="'number'"></app-text-input>
         </div>
         <div class="mb-2">
+          <label>Bedrooms</label>
           <app-text-input formControlName="bedRooms" [label]="'Bedrooms'" [type]="'number'"></app-text-input>
         </div>
         <div class="mb-2">
+          <label>Bathrooms</label>
           <app-text-input formControlName="bathRooms" [label]="'Bathrooms'" [type]="'number'"></app-text-input>
         </div>
         <div class="mb-2">
+          <label>Area</label>
           <app-text-input formControlName="area" [label]="'Area (sq ft)'" [type]="'number'"></app-text-input>
         </div>
         <div class="mb-2">
@@ -30,6 +39,7 @@
             <option [value]="false">No</option>
           </select>
         </div>
+
         <div class="mb-2">
           <label>Property Type</label>
           <select class="form-control" formControlName="typeId">
@@ -37,30 +47,28 @@
           </select>
         </div>
 
-        <!-- Image Upload -->
-        <div class="mb-2">
-          <label>Upload Images</label>
-          <input type="file" (change)="onFileSelected($event)" multiple accept="image/*" class="form-control">
-        </div>
-      </div>
-
-      <!-- Right Side: Image Preview -->
-      <div class="col-md-6">
-        <div *ngIf="previewImages.length > 0" class="d-flex flex-wrap">
-          <div *ngFor="let img of previewImages; let i = index" class="p-2">
-            <div class="image-container">
-              <div>
-                <img [src]="img" class="img-thumbnail preview-img">
-              </div>
-              <button type="button" class="btn btn-danger btn-sm remove-btn" (click)="removeImage(i)">X</button>
-            </div>
-          </div>
-        </div>
-      </div>
+        <button type="submit" class="btn btn-primary mt-3" [disabled]="propertyForm.invalid">
+          Save Changes
+        </button>
+      </form>
     </div>
 
-    <button type="submit" class="btn btn-primary mt-3" [disabled]="propertyForm.invalid">
-      Submit Property
-    </button>
-  </form>
+    <div class="col-md-6 d-flex flex-column align-items-center">
+      <ngx-gallery [options]="options" [images]="images"
+        style="display: inline-block; margin-bottom: 20px;"></ngx-gallery>
+
+        <div class="mb-3">
+          <label>Upload Image</label>
+          <input type="file" (change)="onFileSelected($event)" accept="image/*" class="form-control">
+        </div>
+
+        <div *ngIf="previewImage" class="mb-3">
+          <img [src]="previewImage" class="img-thumbnail" alt="Selected Image" width="150" height="150">
+        </div>
+
+        <button type="button" class="btn btn-secondary" (click)="uploadImage()" [disabled]="!selectedFile">
+          Upload Image
+        </button>
+    </div>
+  </div>
 </div>

@@ -75,7 +75,7 @@ namespace API.Controllers
 
         [Authorize(Roles = "Owner")]
         [HttpPut("updateProperty/{id}")]
-        public async Task<ActionResult> UpdateProperty(int id, [FromForm] UpdatePropertyDto dto)
+        public async Task<ActionResult> UpdateProperty(int id,  UpdatePropertyDto dto)
         {
             var property = await unitOfWork.Properies.FindAsync(p=>p.Id==id);
             if(property is null) return BadRequest("Invalid property Id!");

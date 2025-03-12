@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { IGetPropery } from '../Models/property';
 import { IType } from '../Models/type';
 import { FormGroup } from '@angular/forms';
+import { IPhoto } from '../Models/photo';
 
 @Injectable({
   providedIn: 'root'
@@ -37,8 +38,18 @@ export class PropertiesService {
     return this.http.post<IGetPropery>(`${this.baseUrl}/addProperty`, formData);
   }
 
+  updateProperty(model:any, id:number){
+    return this.http.put(`${this.baseUrl}/updateProperty/${id}`, model)
+  }
+
 
   getTypes(){
     return this.http.get<IType[]>(`${this.baseUrl}/types`)
+  }
+
+  uploadImage(id:number, file:File){
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<IPhoto>(`${this.baseUrl}/uploadImage/${id}`,formData);
   }
 }

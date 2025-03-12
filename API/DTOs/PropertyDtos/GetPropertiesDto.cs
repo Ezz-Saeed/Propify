@@ -6,6 +6,7 @@ namespace API.DTOs.PropertyDtos
     {
         public int Id { get; set; }
         public string TypeName { get; set; }
+        public int TypeId { get; set; }
         public string CategoryName { get; set; }
         public string OwnerName { get; set; }
         public ICollection<Image>? Images { get; set; }

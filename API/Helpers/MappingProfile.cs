@@ -26,9 +26,10 @@ namespace API.Helpers
             CreateMap<UpdatePropertyDto, Property>();
 
             CreateMap<Property, GetPropertiesDto>()
-                .ForMember(d=>d.TypeName, opt=>opt.MapFrom(s=>s.Type.Name))
+                .ForMember(d => d.TypeName, opt => opt.MapFrom(s => s.Type.Name))
                 .ForMember(d => d.CategoryName, opt => opt.MapFrom(s => s.Type.Category.Name))
                 .ForMember(d => d.OwnerName, opt => opt.MapFrom<UserNameResolver>());
+                //.ForMember(d => d.TypeId, opt => opt.MapFrom(s=>s.TypeId));
                 
         }
     }
