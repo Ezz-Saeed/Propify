@@ -17,6 +17,7 @@
         <th>Category</th>
         <th>Owner</th>
         <th></th>
+        <!-- <th></th> -->
       </tr>
     </thead>
     <tbody>
@@ -50,7 +51,8 @@
         <td>{{ property.typeName }}</td>
         <td>{{ property.categoryName }}</td>
         <td>{{ property.ownerName }}</td>
-        <td><button type="button" class="btn btn-secondary" (click)="updateForm(property)">Edit</button></td>
+        <td><button type="button" class="btn btn-info" (click)="updateForm(property)">Edit</button></td>
+        <!-- <td><button type="button" class="btn btn-danger" (click)="deleteProperty(property.id)">Delete</button></td> -->
       </tr>
     </tbody>
   </table>

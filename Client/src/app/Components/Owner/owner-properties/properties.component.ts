@@ -42,4 +42,13 @@ export class PropertiesComponent implements OnInit {
     }
     this.bsModalRef = this.bsModalService.show(UpdatePropertyComponent, config);
   }
+
+  deleteProperty(id:number){
+    this.propertyService.deleteProperty(id).subscribe({
+      next:res=>{
+
+      },
+      error:err=>console.log(err),
+    })
+  }
 }

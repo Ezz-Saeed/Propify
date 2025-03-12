@@ -39,7 +39,7 @@ export class PropertiesService {
   }
 
   updateProperty(model:any, id:number){
-    return this.http.put(`${this.baseUrl}/updateProperty/${id}`, model)
+    return this.http.put<IGetPropery>(`${this.baseUrl}/updateProperty/${id}`, model)
   }
 
 
@@ -51,5 +51,9 @@ export class PropertiesService {
     const formData = new FormData();
     formData.append('file', file);
     return this.http.post<IPhoto>(`${this.baseUrl}/uploadImage/${id}`,formData);
+  }
+
+  deleteProperty(id:number){
+    return this.http.delete(`${this.baseUrl}/deleteImage/${id}`)
   }
 }
