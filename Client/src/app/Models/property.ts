@@ -12,10 +12,11 @@ export interface IProperty {
   isRental: boolean;
   images?:IPhoto[]
   imageUrl?:string
-
+  id:number
 }
 
 export class IGetPropery implements IProperty{
+  id!:number
   images!: IPhoto[];
   imageUrl?: string;
   description!: string;

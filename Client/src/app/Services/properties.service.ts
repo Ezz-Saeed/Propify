@@ -17,6 +17,10 @@ export class PropertiesService {
     return this.http.get<IGetPropery[]>(`${this.baseUrl}/properties`);
   }
 
+  getPropertiesForOwner(){
+    return this.http.get<IGetPropery[]>(`${this.baseUrl}/ownerProperties`);
+  }
+
   addProperty(propertyForm: FormGroup, images:File[]) {
     const formData = new FormData();
 

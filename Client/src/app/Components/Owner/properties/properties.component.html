@@ -1,0 +1,56 @@
+
+<div class="container mt-5">
+  <table class="table table-hover table-bordered shadow-sm ">
+    <thead class="table-secondary">
+      <tr>
+        <th>Image</th>
+        <th>Description</th>
+        <th>Address</th>
+        <th>City</th>
+        <th>Price</th>
+        <th>Bedrooms</th>
+        <th>Bathrooms</th>
+        <th>Area (sqft)</th>
+        <th>Available</th>
+        <th>Rental</th>
+        <th>Type</th>
+        <th>Category</th>
+        <th>Owner</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let property of properties">
+        <td>
+          <img *ngIf="property.imageUrl; else noImage"
+               [src]="property.imageUrl"
+               alt="Property Image"
+               width="80" height="60">
+          <ng-template #noImage>
+            <span>No Image</span>
+          </ng-template>
+        </td>
+        <td>{{ property.description }}</td>
+        <td>{{ property.address }}</td>
+        <td>{{ property.city }}</td>
+        <td>{{ property.price | currency }}</td>
+        <td>{{ property.bedRooms || 'N/A' }}</td>
+        <td>{{ property.bathRooms || 'N/A' }}</td>
+        <td>{{ property.area }}</td>
+        <td>
+          <span [class.text-success]="property.isAvailable" [class.text-danger]="!property.isAvailable">
+            {{ property.isAvailable ? 'Yes' : 'No' }}
+          </span>
+        </td>
+        <td>
+          <span [class.text-success]="property.isRental" [class.text-danger]="!property.isRental">
+            {{ property.isRental ? 'Yes' : 'No' }}
+          </span>
+        </td>
+        <td>{{ property.typeName }}</td>
+        <td>{{ property.categoryName }}</td>
+        <td>{{ property.ownerName }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
