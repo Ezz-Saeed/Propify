@@ -21,7 +21,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let property of properties">
+      <tr *ngFor="let property of properties; let i = index">
         <td>
           <img *ngIf="property.imageUrl; else noImage"
                [src]="property.imageUrl"
@@ -51,7 +51,7 @@
         <td>{{ property.typeName }}</td>
         <td>{{ property.categoryName }}</td>
         <td>{{ property.ownerName }}</td>
-        <td><button type="button" class="btn btn-info" (click)="updateForm(property)">Edit</button></td>
+        <td><button type="button" class="btn btn-info" (click)="updateForm(property, i)">Edit</button></td>
         <!-- <td><button type="button" class="btn btn-danger" (click)="deleteProperty(property.id)">Delete</button></td> -->
       </tr>
     </tbody>

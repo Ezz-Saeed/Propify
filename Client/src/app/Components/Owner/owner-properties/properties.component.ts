@@ -15,7 +15,7 @@ import { UpdatePropertyComponent } from '../update-property/update-property.comp
   ]
 })
 export class PropertiesComponent implements OnInit {
-  properties!:IGetPropery[];
+  public properties!:IGetPropery[];
   bsModalRef!:BsModalRef
   constructor(private propertyService:PropertiesService, private bsModalService:BsModalService){}
   ngOnInit(): void {
@@ -33,14 +33,19 @@ export class PropertiesComponent implements OnInit {
     })
   }
 
-  updateForm(property:IGetPropery){
+  updateForm(property:IGetPropery, i:number){
     const config = {
       class:'modal-dialog-centered modal-lg',
       initialState:{
-        property
+        property,
       }
     }
     this.bsModalRef = this.bsModalService.show(UpdatePropertyComponent, config);
+    this.bsModalRef.content.updatedProperty.subscribe({
+      next: (p:IGetPropery)=>{
+        this.properties[i] = p;
+      }
+    })
   }
 
   deleteProperty(id:number){

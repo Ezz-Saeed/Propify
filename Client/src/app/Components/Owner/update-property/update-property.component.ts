@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import { IGetPropery } from '../../../Models/property';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -16,6 +16,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
   styleUrl: './update-property.component.css',
 })
 export class UpdatePropertyComponent implements OnInit {
+  @Input() updatedProperty = new EventEmitter();
   property!:IGetPropery
   propertyForm!:FormGroup
   propertyTypes: IType[] = []
@@ -24,7 +25,8 @@ export class UpdatePropertyComponent implements OnInit {
   selectedFile: File | null = null;
   previewImage: string | undefined = undefined;
 
-  constructor(public bsModalref:BsModalRef,private fb:FormBuilder, private propertiesService:PropertiesService){}
+  constructor(public bsModalref:BsModalRef,private fb:FormBuilder,
+    private propertiesService:PropertiesService){}
   ngOnInit(): void {
     this.options = [
           {
@@ -96,8 +98,9 @@ export class UpdatePropertyComponent implements OnInit {
     if(this.propertyForm.valid){
       this.propertiesService.updateProperty(this.propertyForm.value, this.property.id).subscribe({
         next:res=>{
-          console.log(res)
+          // console.log(res)
           this.property = res;
+          this.updatedProperty.emit(this.property)
           this.bsModalref.hide();
         },
         error:err=>console.log(err),
