@@ -66,6 +66,7 @@ export class UpdatePropertyComponent implements OnInit {
       bathRooms: [this.property.bathRooms,],
       area: [this.property.area, Validators.required],
       isRental: [this.property.isRental,Validators.required],
+      isAvailable: [this.property.isAvailable,Validators.required],
       typeId: [this.property.typeId, Validators.required],
       // images: ['',]
     })
