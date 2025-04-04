@@ -1,0 +1,8 @@
+.description-column {
+  min-width: 300px; /* Adjust as needed */
+  max-width: 400px; /* Prevent it from getting too large */
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+

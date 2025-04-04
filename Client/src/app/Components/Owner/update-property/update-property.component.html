@@ -41,6 +41,14 @@
         </div>
 
         <div class="mb-2">
+          <label>Availability?</label>
+          <select class="form-control" formControlName="isAvailable">
+            <option [ngValue]="true">Yes</option>
+            <option [ngValue]="false">No</option>
+          </select>
+        </div>
+
+        <div class="mb-2">
           <label>Property Type</label>
           <select class="form-control" formControlName="typeId">
             <option *ngFor="let type of propertyTypes" [value]="type.id">{{ type.name }}</option>

@@ -4,6 +4,7 @@ import { PropertiesService } from '../../../Services/properties.service';
 import { CommonModule } from '@angular/common';
 import { BsModalRef, BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import { UpdatePropertyComponent } from '../update-property/update-property.component';
+import { DeletePropertyComponent } from '../delete-property/delete-property.component';
 
 @Component({
   selector: 'app-properties',
@@ -17,6 +18,7 @@ import { UpdatePropertyComponent } from '../update-property/update-property.comp
 export class PropertiesComponent implements OnInit {
   public properties!:IGetPropery[];
   bsModalRef!:BsModalRef
+  deleteModal!:BsModalRef
   constructor(private propertyService:PropertiesService, private bsModalService:BsModalService){}
   ngOnInit(): void {
     this.loadProperties();
@@ -48,12 +50,19 @@ export class PropertiesComponent implements OnInit {
     })
   }
 
-  deleteProperty(id:number){
-    this.propertyService.deleteProperty(id).subscribe({
-      next:res=>{
-
-      },
-      error:err=>console.log(err),
+  deleteProperty(propertyId:number, propertyIndex:number){
+    const config = {
+      class:'modal-dialog-centered',
+      initialState:{
+        propertyId,
+        propertyIndex
+      }
+    }
+    this.deleteModal = this.bsModalService.show(DeletePropertyComponent, config);
+    this.deleteModal.content.deletedPropertyIndex.subscribe({
+      next:(index:number)=>{
+        this.properties.splice(index,1);
+      }
     })
   }
 }

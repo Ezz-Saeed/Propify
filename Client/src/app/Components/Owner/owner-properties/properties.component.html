@@ -3,8 +3,8 @@
   <table class="table table-hover table-bordered shadow-sm ">
     <thead class="table-secondary">
       <tr>
-        <th>Image</th>
-        <th>Description</th>
+        <th>Property</th>
+        <th class="description-column">Description</th>
         <th>Address</th>
         <th>City</th>
         <th>Price</th>
@@ -17,13 +17,13 @@
         <th>Category</th>
         <th>Owner</th>
         <th></th>
-        <!-- <th></th> -->
+        <th></th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let property of properties; let i = index">
-        <td>
-          <img *ngIf="property.imageUrl; else noImage"
+        <td class="parent" style=" width: 50%;">
+          <img class="property-img"  *ngIf="property.imageUrl; else noImage"
                [src]="property.imageUrl"
                alt="Property Image"
                width="80" height="60">
@@ -31,7 +31,7 @@
             <span>No Image</span>
           </ng-template>
         </td>
-        <td>{{ property.description }}</td>
+        <td class="description-column">{{ property.description }}</td>
         <td>{{ property.address }}</td>
         <td>{{ property.city }}</td>
         <td>{{ property.price | currency }}</td>
@@ -52,7 +52,7 @@
         <td>{{ property.categoryName }}</td>
         <td>{{ property.ownerName }}</td>
         <td><button type="button" class="btn btn-info" (click)="updateForm(property, i)">Edit</button></td>
-        <!-- <td><button type="button" class="btn btn-danger" (click)="deleteProperty(property.id)">Delete</button></td> -->
+        <td><button type="button" class="btn btn-danger" (click)="deleteProperty(property.id, i)">Remove</button></td>
       </tr>
     </tbody>
   </table>

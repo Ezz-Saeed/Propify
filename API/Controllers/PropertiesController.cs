@@ -13,11 +13,12 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Owner")]
     public class PropertiesController(IUnitOfWork unitOfWork, IMapper mapper,
         UserManager<AppUser> userManager, IImageService imageService) : ControllerBase
     {
-        [HttpPost("addProperty")]      
+        [HttpPost("addProperty")]
+        [AllowAnonymous]
         public async Task<IActionResult> AddProperty([FromForm]AddPropertyDto dto)
         {
             if(!ModelState.IsValid) return BadRequest(ModelState);
@@ -48,7 +49,7 @@ namespace API.Controllers
         [HttpGet("properties")]
         public async Task<IActionResult> GetAllProperties()
         {
-            var properties = await unitOfWork.Properies.GetAllAsync(p=>true,"Type", "Type.Category", "Images");
+            var properties = await unitOfWork.Properies.GetAllAsync(p=>!p.IsDeleted, "Type", "Type.Category", "Images");
             var propertiesToReturn = mapper.Map<List<GetPropertiesDto>>(properties);
             return Ok(propertiesToReturn);
         }
@@ -63,37 +64,58 @@ namespace API.Controllers
         }
 
 
-        [Authorize(Roles ="Owner")]
         [HttpGet("ownerProperties")]
         public async Task<IActionResult> GetPropertiesForOwner()
         {
             var userId = User.GetUserId();
-            var properties = await unitOfWork.Properies.GetAllAsync(p => p.AppUserId==userId, "Type", "Type.Category", "Images");
+            var properties = await unitOfWork.Properies.GetAllAsync(p => p.AppUserId==userId && !p.IsDeleted, "Type", "Type.Category", "Images");
             var propertiesToReturn = mapper.Map<List<GetPropertiesDto>>(properties);
             return Ok(propertiesToReturn);
         }
 
-        [Authorize(Roles = "Owner")]
         [HttpPut("updateProperty/{id}")]
         public async Task<ActionResult> UpdateProperty(int id,  UpdatePropertyDto dto)
         {
             var property = await unitOfWork.Properies.FindAsync(p=>p.Id==id);
             if(property is null) return BadRequest("Invalid property Id!");
-            property.Description = dto.Description;
-            property.Address = dto.Address;
-            property.Area = dto.Area;
-            property.BedRooms = dto.BedRooms;
-            property.BathRooms = dto.BathRooms;
-            property.City = dto.City; 
-            property.Price = dto.Price;
-            property.IsAvailable = dto.IsAvailable;
-            property.IsRental = dto.IsRental;
-            property.TypeId = dto.TypeId;
+            if(dto.Description != property.Description)
+                property.Description = dto.Description;
+            if (dto.Address != property.Address)
+                property.Address = dto.Address;
+            if (dto.Area != property.Area)
+                property.Area = dto.Area;
+            if (dto.BedRooms != property.BedRooms)
+                property.BedRooms = dto.BedRooms;
+            if (dto.BathRooms != property.BathRooms)
+                property.BathRooms = dto.BathRooms;
+            if (dto.City != property.City)
+                property.City = dto.City;
+            if (dto.Price != property.Price)
+                property.Price = dto.Price;
+            if (dto.IsAvailable != property.IsAvailable)
+                property.IsAvailable = dto.IsAvailable;
+            if (dto.IsRental != property.IsRental)
+                property.IsRental = dto.IsRental;
+            if (dto.TypeId != property.TypeId)
+                property.TypeId = dto.TypeId;
             unitOfWork.Properies.Update(property);
             await unitOfWork.Dispose();
-            return Ok(property);
+            var updatedProperty = await unitOfWork.Properies.FindAsync(p => p.Id == id, "Type", "Type.Category", "Images");
+            var propertyToReturn = mapper.Map<GetPropertiesDto>(updatedProperty);
+            return Ok(propertyToReturn);
         }
-        [Authorize(Roles = "Owner")]
+
+        [HttpPut("deleteProperty/{id}")]
+        public async Task<IActionResult> DeleteProperty(int id)
+        {
+            var property = await unitOfWork.Properies.FindAsync(p => p.Id == id);
+            if (property is null) return NotFound();
+            property.IsDeleted = true;
+            unitOfWork.Properies.Update(property);
+            await unitOfWork.Dispose();
+            return Ok();
+        }
+
         [HttpPost("uploadImage/{propertyId}")]
         public async Task<IActionResult> UploadImage(IFormFile file, int propertyId)
         {
@@ -117,7 +139,7 @@ namespace API.Controllers
             return Ok(mapper.Map<ImageDto>(image));
         }
 
-        [Authorize(Roles = "Owner")]
+        
         [HttpDelete("deleteImage/{propertyId}")]
         public async Task<IActionResult>DeleteImage(int propertyId,[FromQuery] string publicId)
         {
@@ -135,6 +157,7 @@ namespace API.Controllers
         }
 
         [HttpGet("types")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetTypes()
         {
             var types = mapper.Map<List<TypeDto>>(await unitOfWork.Types.GetAllAsync(p => true, "Category"));
