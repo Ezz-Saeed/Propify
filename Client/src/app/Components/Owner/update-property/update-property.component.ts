@@ -7,13 +7,17 @@ import { PropertiesService } from '../../../Services/properties.service';
 import { IType } from '../../../Models/type';
 import { NgxGalleryAnimation, NgxGalleryImage, NgxGalleryModule, NgxGalleryOptions } from '@kolkov/ngx-gallery';
 import { IPhoto } from '../../../Models/photo';
-import { BsModalRef } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { DeletePropertyImageComponent } from '../delete-property-image/delete-property-image.component';
 
 @Component({
   selector: 'app-update-property',
   imports: [CommonModule,FormsModule, ReactiveFormsModule, TextInputComponent, NgxGalleryModule],
   templateUrl: './update-property.component.html',
   styleUrl: './update-property.component.css',
+  providers:[
+    BsModalService
+  ]
 })
 export class UpdatePropertyComponent implements OnInit {
   @Input() updatedProperty = new EventEmitter();
@@ -21,39 +25,30 @@ export class UpdatePropertyComponent implements OnInit {
   propertyForm!:FormGroup
   propertyTypes: IType[] = []
   options!:NgxGalleryOptions[]
-  images!:NgxGalleryImage[]
+  galleryImages!:NgxGalleryImage[]
+  propertyImages!:IPhoto[]
   selectedFile: File | null = null;
   previewImage: string | undefined = undefined;
+  deleteImageModalRef!:BsModalRef;
 
   constructor(public bsModalref:BsModalRef,private fb:FormBuilder,
-    private propertiesService:PropertiesService){}
+    private propertiesService:PropertiesService, private bsModalService:BsModalService){}
   ngOnInit(): void {
     this.options = [
           {
             width:'300px',
             height:'300px',
             imagePercent:100,
-            thumbnailsColumns:4,
+            // thumbnailsColumns:4,
+            thumbnails:false,
             imageAnimation:NgxGalleryAnimation.Slide,
             preview:false
           }
         ]
     this.inintializeForm();
-    this.images = this.getPropertyImages();
+    this.galleryImages = this.getPropertyImages();
+    this.propertyImages = this.property.images;
     this.loadTypes();
-  }
-
-
-  private getPropertyImages():NgxGalleryImage[]{
-    const images = [];
-    for(let image of this.property.images){
-      images.push({
-        small:image.url,
-        medium:image.url,
-        big:image.url,
-      })
-    }
-    return images;
   }
 
   private inintializeForm(){
@@ -72,6 +67,36 @@ export class UpdatePropertyComponent implements OnInit {
     })
   }
 
+  private getPropertyImages():NgxGalleryImage[]{
+    const images = [];
+    for(let image of this.property.images){
+        images.push({
+          small:image.url,
+          medium:image.url,
+          big:image.url,
+          isMain: image.isMain,
+          propertyId:image.propertyId,
+          publicId:image.publicId
+        })
+    }
+    return images;
+  }
+
+  uploadImage(){
+    if(this.selectedFile){
+      this.propertiesService.uploadImage(this.property.id, this.selectedFile).subscribe({
+        next:res=>{
+          const image = new IPhoto()
+          image.url = res.url
+          image.isMain = res.isMain
+          this.property.images.push(image);
+          this.previewImage = undefined;
+          this.bsModalref.hide();
+        },
+        error:err=>console.log(err)
+      })
+    }
+  }
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -87,6 +112,22 @@ export class UpdatePropertyComponent implements OnInit {
     }
   }
 
+  deleteImage(propertyId:number, publicId:string){
+    const config = {
+      class: "modal-dialog-centered",
+      initialState:{
+        propertyId,
+        publicId
+      }
+    }
+    this.deleteImageModalRef = this.bsModalService.show(DeletePropertyImageComponent, config);
+    this.deleteImageModalRef.content.deletedImagePublicId.subscribe({
+      next:(publicId:string)=>{
+        const imgIndex = this.property.images.findIndex(img=>img.publicId == publicId)
+        this.property.images.splice(imgIndex,1)
+      }
+    })
+  }
 
   loadTypes(){
     this.propertiesService.getTypes().subscribe({
@@ -109,21 +150,7 @@ export class UpdatePropertyComponent implements OnInit {
     }
   }
 
-  uploadImage(){
-    if(this.selectedFile){
-      this.propertiesService.uploadImage(this.property.id, this.selectedFile).subscribe({
-        next:res=>{
-          const image = new IPhoto()
-          image.url = res.url
-          image.isMain = res.isMain
-          this.property.images.push(image);
-          this.previewImage = undefined;
-          this.bsModalref.hide();
-        },
-        error:err=>console.log(err)
-      })
-    }
-  }
+
   close(){
     this.bsModalref.hide();
   }

@@ -62,9 +62,18 @@
     </div>
 
     <div class="col-md-6 d-flex flex-column align-items-center">
-      <ngx-gallery [options]="options" [images]="images"
-        style="display: inline-block; margin-bottom: 20px;"></ngx-gallery>
+      <ngx-gallery [options]="options" [images]="galleryImages"
+        style="display: inline-block; margin-bottom: 10px;"></ngx-gallery>
 
+        <div class="d-flex flex-wrap gap-2 mt-2 mb-2">
+          <div *ngFor="let img of propertyImages" class="position-relative">
+            <img [src]="img.url" class="img-thumbnail" width="80" height="50" alt="Thumb">
+            <button type="button" (click)="deleteImage(img.propertyId,img.publicId!)"
+            class="btn btn-sm btn-danger position-absolute top-0 end-0 small-delete-btn">
+              &times;
+            </button>
+          </div>
+        </div>
         <div class="mb-3">
           <label>Upload Image</label>
           <input type="file" (change)="onFileSelected($event)" accept="image/*" class="form-control">

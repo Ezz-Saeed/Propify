@@ -56,4 +56,8 @@ export class PropertiesService {
   deleteProperty(id:number){
     return this.http.put(`${this.baseUrl}/deleteProperty/${id}`,{})
   }
+
+  deleteImage(id:number, publicId:string){
+    return this.http.delete(`${this.baseUrl}/deleteImage/${id}?publicId=${publicId}`)
+  }
 }
