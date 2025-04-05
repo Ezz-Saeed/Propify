@@ -14,13 +14,13 @@ namespace API.Data
         
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<PropertyType> PropertyTypes { get; set; }
-        //public virtual DbSet<Image> Images { get; set; }
+        //public virtual DbSet<PropertyImage> Images { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            //builder.Entity<Image>().OwnsOne(i => i.Property);
+            //builder.Entity<PropertyImage>().OwnsOne(i => i.Property);
                 
 
             builder.Entity<Category>().HasData(

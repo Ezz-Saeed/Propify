@@ -124,7 +124,7 @@ namespace API.Controllers
             var result = await imageService.UploadImageAsync(file);
             if(result.Error is not null) return BadRequest(new {Message= result.Error.Message});
 
-            Image image = new()
+            PropertyImage image = new()
             {
                 Url = result.SecureUrl.AbsoluteUri,
                 PublicId = result.PublicId,

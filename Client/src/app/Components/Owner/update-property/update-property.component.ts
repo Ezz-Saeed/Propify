@@ -140,7 +140,6 @@ export class UpdatePropertyComponent implements OnInit {
     if(this.propertyForm.valid){
       this.propertiesService.updateProperty(this.propertyForm.value, this.property.id).subscribe({
         next:res=>{
-          console.log(res)
           this.property = res;
           this.updatedProperty.emit(this.property)
           this.bsModalref.hide();

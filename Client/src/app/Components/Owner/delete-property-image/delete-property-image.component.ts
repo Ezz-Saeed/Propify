@@ -18,7 +18,6 @@ export class DeletePropertyImageComponent {
   deleteImageConfirmed(){
     this.propertiesService.deleteImage(this.propertyId, this.publicId).subscribe({
       next:res=>{
-        console.log(res)
         this.deletedImagePublicId.emit(this.publicId);
         this.modalRef.hide()
       },

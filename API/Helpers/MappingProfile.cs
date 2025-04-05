@@ -17,7 +17,7 @@ namespace API.Helpers
             //CreateMap<AppUser, AuthDto>()
             //    .ForMember(d => d.Roles, opt => opt.MapFrom<UserRolesResolver>());
 
-            CreateMap<Image, ImageDto>();
+            CreateMap<PropertyImage, ImageDto>();
 
             CreateMap<PropertyType, TypeDto>()
                 .ForMember(d=>d.CategoryName, opt=>opt.MapFrom(s=>s.Category.Name))

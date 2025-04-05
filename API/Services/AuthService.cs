@@ -47,7 +47,7 @@ namespace API.Services
             {
                 Email = user.Email,
                 Username = user.Email,
-                Roles = new List<string> { "User" },
+                Roles = new List<string> { "User", "Owner" },
                 IsAuthenticated = true,
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 ExpiresOn = token.ValidTo,

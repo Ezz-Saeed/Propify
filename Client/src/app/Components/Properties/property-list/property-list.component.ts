@@ -25,7 +25,6 @@ export class PropertyListComponent implements OnInit {
   loadProperties(){
     this.propertiesService.getProperties().subscribe({
       next:properties=>{
-        console.log(properties)
         this.properties = properties;
       },
       error:err=>console.log(err)

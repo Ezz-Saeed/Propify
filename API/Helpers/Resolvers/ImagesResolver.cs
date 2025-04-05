@@ -7,11 +7,11 @@ using Humanizer;
 
 namespace API.Helpers.Resolvers
 {
-    public class ImagesResolver(IImageService imageService) : IValueResolver<AddPropertyDto, Property, ICollection<Image>>
+    public class ImagesResolver(IImageService imageService) : IValueResolver<AddPropertyDto, Property, ICollection<PropertyImage>>
     {
-        public  ICollection<Image> Resolve(AddPropertyDto source, Property destination, ICollection<Image> destMember, ResolutionContext context)
+        public  ICollection<PropertyImage> Resolve(AddPropertyDto source, Property destination, ICollection<PropertyImage> destMember, ResolutionContext context)
         {
-            List<Image> images = new List<Image>();
+            List<PropertyImage> images = new List<PropertyImage>();
             if (source.Images is not null && source.Images.Any())
             {
                 
@@ -19,7 +19,7 @@ namespace API.Helpers.Resolvers
                 {
                     var uploadResult = imageService.UploadImageAsync(i).Result;
                     //if (uploadResult.Error is not null) return null;
-                    Image image = new()
+                    PropertyImage image = new()
                     {
                         Url = uploadResult.SecureUrl.AbsoluteUri,
                         PublicId = uploadResult.PublicId,
