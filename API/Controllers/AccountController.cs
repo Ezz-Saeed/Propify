@@ -1,5 +1,6 @@
 ﻿using API.DTOs;
 using API.DTOs.AuthDtos;
+using API.DTOs.OwnerDtos;
 using API.Extensions;
 using API.Interfaces;
 using API.Models;
@@ -79,6 +80,16 @@ namespace API.Controllers
             if (!result.IsAuthenticated)
                 return BadRequest(result.Message);
             SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiration);
+            return Ok(result);
+        }
+
+        [Authorize(Roles ="Owner")]
+        [HttpPut("editProfile")]
+        public async Task<IActionResult> EditProfile([FromForm] EditProfileDto dto)
+        {
+            var id = User.GetUserId();
+            var result = await authenticationService.EditProfileAsync(id, dto);
+            if(result is null) return Unauthorized();
             return Ok(result);
         }
 

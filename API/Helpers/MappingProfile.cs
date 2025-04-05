@@ -14,10 +14,10 @@ namespace API.Helpers
                 .ForMember(d=>d.Images, opt=>opt.MapFrom<ImagesResolver>())
                 .ForMember(d=>d.IsAvailable, opt=>opt.MapFrom(x=>true));
 
-            //CreateMap<AppUser, AuthDto>()
-            //    .ForMember(d => d.Roles, opt => opt.MapFrom<UserRolesResolver>());
+            CreateMap<AppUser, OwnerDto>()
+                .ForMember(d => d.ProfileImage, opt => opt.MapFrom<ProfileImageResolver>());
 
-            CreateMap<PropertyImage, ImageDto>();
+            CreateMap<PropertyImage, PropertyImageDto>();
 
             CreateMap<PropertyType, TypeDto>()
                 .ForMember(d=>d.CategoryName, opt=>opt.MapFrom(s=>s.Category.Name))

@@ -1,4 +1,5 @@
 ﻿using API.DTOs.AuthDtos;
+using API.DTOs.OwnerDtos;
 using API.Helpers;
 using API.Interfaces;
 using API.Models;
@@ -14,8 +15,8 @@ using System.Text;
 
 namespace API.Services
 {
-    public class AuthService(UserManager<AppUser> userManager,
-        IOptions<JWT> jwtOptions, RoleManager<IdentityRole> roleManager) : IAuthService
+    public class AuthService(UserManager<AppUser> userManager, IOptions<JWT> jwtOptions, 
+        RoleManager<IdentityRole> roleManager, IImageService imageService, IMapper mapper) : IAuthService
     {
         private readonly JWT jwt = jwtOptions.Value;
 
@@ -130,6 +131,32 @@ namespace API.Services
             authModel.RefreshToken = newRefreshToken.Token;
             authModel.RefreshTokenExpiration = newRefreshToken.ExpiresOn;
             return authModel;
+        }
+
+        public async Task<OwnerDto> EditProfileAsync(string id, EditProfileDto dto)
+        {
+            var owner = await userManager.FindByIdAsync(id);
+            if (owner is null) return null;
+            if(dto.FirstName is not null)
+                owner.FirstName = dto.FirstName;
+            if (dto.LastName is not null)
+                owner.LastName = dto.LastName;
+            if(dto.DisplayName is not null)
+                owner.DisplayName = dto.DisplayName;
+            if(dto.ProfileImage is not null && dto.ProfileImage.Length > 0)
+            {
+                var result = await imageService.UploadImageAsync(dto.ProfileImage);
+                ProfileImage image = new()
+                {
+                    Url = result.SecureUrl.AbsoluteUri,
+                    PublicId = result.PublicId,
+                };
+                owner.ProfileImage = image;
+            }
+            await userManager.UpdateAsync(owner);
+            var updatedOwner = await userManager.FindByIdAsync(id);
+            var ownerToReturn = mapper.Map<OwnerDto>(owner);
+            return ownerToReturn;
         }
 
         public async Task<AppUser> LoadCurrentUser(string userId)

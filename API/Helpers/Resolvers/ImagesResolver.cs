@@ -9,7 +9,8 @@ namespace API.Helpers.Resolvers
 {
     public class ImagesResolver(IImageService imageService) : IValueResolver<AddPropertyDto, Property, ICollection<PropertyImage>>
     {
-        public  ICollection<PropertyImage> Resolve(AddPropertyDto source, Property destination, ICollection<PropertyImage> destMember, ResolutionContext context)
+        public  ICollection<PropertyImage> Resolve(AddPropertyDto source, Property destination, 
+            ICollection<PropertyImage> destMember, ResolutionContext context)
         {
             List<PropertyImage> images = new List<PropertyImage>();
             if (source.Images is not null && source.Images.Any())

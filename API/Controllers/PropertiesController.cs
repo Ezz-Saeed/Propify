@@ -136,7 +136,7 @@ namespace API.Controllers
             if (!await unitOfWork.Dispose())
                 return BadRequest(new { Message = "Couldn't upload image!" });
 
-            return Ok(mapper.Map<ImageDto>(image));
+            return Ok(mapper.Map<PropertyImageDto>(image));
         }
 
         
