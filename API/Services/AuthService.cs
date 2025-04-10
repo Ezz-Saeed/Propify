@@ -150,6 +150,7 @@ namespace API.Services
                 {
                     Url = result.SecureUrl.AbsoluteUri,
                     PublicId = result.PublicId,
+                    AppUserId = owner.Id,
                 };
                 owner.ProfileImage = image;
             }

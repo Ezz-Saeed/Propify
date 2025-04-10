@@ -1,0 +1,18 @@
+<div class="bar bg-light bg-primary">
+  <div class="px-2 pt-5">
+  <h6 class="text-muted pointer list-head" (click)="toggleAccountMenu()">
+    <i [ngClass]="accountMenuOpen ? 'bi bi-chevron-down' : 'bi bi-chevron-right'"></i> Account Management
+  </h6>
+  <ul class="list" *ngIf="accountMenuOpen">
+    <li class="">
+      <a routerLink="/account/edit-profile" class="text-decoration-none text-primary pointer">Edit Profile</a>
+    </li>
+    <li class="">
+      <a routerLink="/account/change-password" class="text-decoration-none text-primary pointer">Change Password</a>
+    </li>
+    <li class="">
+      <a class="text-danger text-decoration-none pointer">Sign Out</a>
+    </li>
+  </ul>
+</div>
+</div>

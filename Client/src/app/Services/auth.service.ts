@@ -72,6 +72,10 @@ export class AuthService {
     )
   }
 
+  editProfile(data:any){
+    
+  }
+
 //   private handleError(error: HttpErrorResponse) {
 //     let errorMsg = 'Error! Check your inputs.';
 
