@@ -9,6 +9,6 @@ namespace API.Models
         public bool IsMain { get; set; }
         [ForeignKey(nameof(Property))]
         public int PropertyId { get; set; }
-        public Property Property { get; set; }
+        public virtual Property Property { get; set; }
     }
 }

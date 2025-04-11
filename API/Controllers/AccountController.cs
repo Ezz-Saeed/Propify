@@ -28,6 +28,11 @@ namespace API.Controllers
             if(user is null) return Unauthorized("Unauthorized user!");
             var roles = await userManager.GetRolesAsync(user);
             var jwtToken = await authenticationService.GenerateToken(user);
+            var image = new ProfileImageDto
+            {
+                Url = user.ProfileImage?.Url,
+                PublicId = user.ProfileImage?.PublicId,
+            };
             var userDto = new UserDto
             {
                 Username = user.UserName,
@@ -37,7 +42,9 @@ namespace API.Controllers
                 Roles = roles.ToList(),
                 Token = new JwtSecurityTokenHandler().WriteToken(jwtToken),
                 ExpiresOn = jwtToken.ValidTo,
-                IsAuthenticated = true
+                IsAuthenticated = true,
+                ProfileImage = image,
+                DisplayName = user.DisplayName,
             };
 
             return Ok(userDto);

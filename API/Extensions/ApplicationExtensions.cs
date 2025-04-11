@@ -20,7 +20,7 @@ namespace API.Extensions
             services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("connection"));
+                options.UseLazyLoadingProxies().UseSqlServer(configuration.GetConnectionString("connection"));
             });
 
             services.AddCors(options =>

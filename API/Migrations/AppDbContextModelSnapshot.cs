@@ -119,7 +119,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
 
                     b.HasData(
                         new
@@ -176,7 +176,7 @@ namespace API.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("ProfileImage");
+                    b.ToTable("ProfileImage", (string)null);
                 });
 
             modelBuilder.Entity("API.Models.Property", b =>
@@ -233,7 +233,7 @@ namespace API.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("Property");
+                    b.ToTable("Property", (string)null);
                 });
 
             modelBuilder.Entity("API.Models.PropertyType", b =>
@@ -255,7 +255,7 @@ namespace API.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("PropertyTypes");
+                    b.ToTable("PropertyTypes", (string)null);
 
                     b.HasData(
                         new
@@ -546,7 +546,7 @@ namespace API.Migrations
                         .WithMany()
                         .HasForeignKey("ProfileImageId");
 
-                    b.OwnsMany("API.Models.RefreshToken", "RefreshTokens", b1 =>
+                    b.OwnsMany("API.Models.AppUser.RefreshTokens#API.Models.RefreshToken", "RefreshTokens", b1 =>
                         {
                             b1.Property<string>("AppUserId")
                                 .HasColumnType("nvarchar(450)");
@@ -572,7 +572,7 @@ namespace API.Migrations
 
                             b1.HasKey("AppUserId", "Id");
 
-                            b1.ToTable("RefreshToken");
+                            b1.ToTable("RefreshToken", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("AppUserId");
@@ -606,7 +606,7 @@ namespace API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsMany("API.Models.PropertyImage", "Images", b1 =>
+                    b.OwnsMany("API.Models.Property.Images#API.Models.PropertyImage", "Images", b1 =>
                         {
                             b1.Property<int>("PropertyId")
                                 .HasColumnType("int");
@@ -629,7 +629,7 @@ namespace API.Migrations
 
                             b1.HasKey("PropertyId", "Id");
 
-                            b1.ToTable("PropertyImage");
+                            b1.ToTable("PropertyImage", (string)null);
 
                             b1.WithOwner("Property")
                                 .HasForeignKey("PropertyId");

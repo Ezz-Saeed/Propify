@@ -3,6 +3,7 @@ import { catchError, map, ReplaySubject, throwError } from 'rxjs';
 import { IAuthUser } from '../Models/auth.user';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Environment } from '../Environments/environment';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +45,7 @@ export class AuthService {
     return this.http.get<IAuthUser>(`${this.baseUrl}/refreshToken`,{withCredentials:true}).pipe(
       map(user=>{
         if(user){
+          console.log(user)
           this.loadCurrentUser(user)
         }
         return user
@@ -65,32 +67,23 @@ export class AuthService {
     return this.http.get<IAuthUser>(`${this.baseUrl}/loadCurrentUser`,{headers:headers}).pipe(
       map((user:IAuthUser)=>{
         if(user){
-          this.currentUserSource.next(user)
+          this.loadCurrentUser(user)
         }
         return user;
       })
     )
   }
 
-  editProfile(data:any){
-    
+  editProfile(data:FormGroup, image?:File){
+    const formData = new FormData();
+    Object.keys(data.value).forEach((key)=>{
+      formData.append(key, data.value[key])
+    })
+    // console.log(formData)
+    if(image){
+      formData.append('profileImage', image)
+    }
+    return this.http.put(`${this.baseUrl}/editProfile/`, formData)
   }
-
-//   private handleError(error: HttpErrorResponse) {
-//     let errorMsg = 'Error! Check your inputs.';
-
-//     if (error.error) {
-//       if (typeof error.error === 'string') {
-//         errorMsg = error.error; // In case the server returns a plain text error
-//       } else if (error.error.message) {
-//         errorMsg = error.error.message; // Extract message from JSON response
-//       }
-//     }
-
-//     console.error('Error:', errorMsg);
-//     return throwError(() => new Error(errorMsg));
-// }
-
-
 
 }

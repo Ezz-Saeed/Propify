@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using API.DTOs.OwnerDtos;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.DTOs.AuthDtos
 {
@@ -8,9 +9,11 @@ namespace API.DTOs.AuthDtos
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string? DisplayName { get; set; }
         public List<string> Roles { get; set; }
         public string Token { get; set; }
         public DateTime ExpiresOn { get; set; }
         public bool IsAuthenticated { get; set; }
+        public ProfileImageDto? ProfileImage { get; set; } = new ProfileImageDto();
     }
 }

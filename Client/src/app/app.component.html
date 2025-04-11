@@ -1,6 +1,18 @@
-<app-navbar></app-navbar>
-<div class="container-fluid row ">
+<app-navbar #navbar></app-navbar>
+<!-- Backdrop -->
+<div class="sidebar-backdrop" *ngIf="sidebarOpen" (click)="toggleSidebar()"></div>
 
-  <div class="col-3"><app-sidebar></app-sidebar></div>
-  <div class="col-9"><router-outlet></router-outlet></div>
+<!-- Sidebar -->
+<div class="sidebar-overlay" [class.open]="sidebarOpen">
+  <app-sidebar></app-sidebar>
+</div>
+
+<!-- Main layout -->
+<div class="container-fluid">
+  <div class="d-flex align-items-start">
+    <i class="bi bi-list p-3 pointer fs-2 list-icon" (click)="toggleSidebar()"></i>
+    <div class="flex-grow-1">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
 </div>

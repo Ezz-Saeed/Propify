@@ -8,6 +8,6 @@ namespace API.Models
         public int Id { get; set; }
         [ForeignKey(nameof(AppUser))]
         public string? AppUserId { get; set; }
-        public AppUser? AppUser { get; set; }
+        public virtual AppUser? AppUser { get; set; }
     }
 }

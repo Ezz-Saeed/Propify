@@ -5,6 +5,7 @@ import { PropertyListComponent } from './Components/Properties/property-list/pro
 import { AddPropertyComponent } from './Components/Properties/add-property/add-property.component';
 import { PropertiesComponent } from './Components/Owner/owner-properties/properties.component';
 import { OwnerDashboardComponent } from './Components/Owner/owner-dashboard/owner-dashboard.component';
+import { EditProfileComponent } from './Components/edit-profile/edit-profile.component';
 
 export const routes: Routes = [
   {path:'login', component:LoginComponent},
@@ -13,4 +14,5 @@ export const routes: Routes = [
   {path:'newProperty', component:AddPropertyComponent},
   {path:'ownerProperties', component:PropertiesComponent},
   {path:'ownerDashboard', component:OwnerDashboardComponent},
+  {path:'editProfile', component:EditProfileComponent},
 ];

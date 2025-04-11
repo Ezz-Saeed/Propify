@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using API.DTOs.OwnerDtos;
+using System.Text.Json.Serialization;
 
 namespace API.DTOs.AuthDtos
 {
@@ -17,5 +18,6 @@ namespace API.DTOs.AuthDtos
         [JsonIgnore]
         public string? RefreshToken { get; set; }
         public DateTime RefreshTokenExpiration { get; set; }
+        public ProfileImageDto? ProfileImage { get; set; } = new ProfileImageDto();
     }
 }

@@ -4,6 +4,6 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<PropertyType> Types { get; set; }
+        public virtual ICollection<PropertyType> Types { get; set; }
     }
 }

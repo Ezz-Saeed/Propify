@@ -43,6 +43,7 @@ namespace API.Services
             }
 
             await userManager.AddToRoleAsync(user, "User");
+            await userManager.AddToRoleAsync(user, "Owner");
             var token = await GenerateToken(user);
             return new AuthDto
             {
@@ -61,41 +62,43 @@ namespace API.Services
 
         public async Task<AuthDto> GetTokenAsync(LoginDto model)
         {
-            var authModel = new AuthDto();
+            var authDto = new AuthDto();
             var user = await userManager.FindByEmailAsync(model.Email);
             if (user is null || !await userManager.CheckPasswordAsync(user, model.Password))
             {
-                authModel.Message = "Invalid email or password!";
-                return authModel;
+                authDto.Message = "Invalid email or password!";
+                return authDto;
             }
             var token = await GenerateToken(user);
             var roles = await userManager.GetRolesAsync(user);
 
-            authModel.Username = user.UserName;
-            authModel.Email = user.Email;
-            authModel.Roles = roles.ToList();
-            authModel.Token = new JwtSecurityTokenHandler().WriteToken(token);
-            authModel.ExpiresOn = token.ValidTo.ToLocalTime();
-            authModel.FirstName = user.FirstName;
-            authModel.LastName = user.LastName;
-            authModel.IsAuthenticated = true;
+            authDto.Username = user.UserName;
+            authDto.Email = user.Email;
+            authDto.Roles = roles.ToList();
+            authDto.Token = new JwtSecurityTokenHandler().WriteToken(token);
+            authDto.ExpiresOn = token.ValidTo.ToLocalTime();
+            authDto.FirstName = user.FirstName;
+            authDto.LastName = user.LastName;
+            authDto.IsAuthenticated = true;
+            authDto.ProfileImage.Url = user.ProfileImage?.Url;
+            authDto.ProfileImage.PublicId = user.ProfileImage?.PublicId;
 
             if (user.RefreshTokens.Any(t => t.IsActive))
             {
                 var activeRefreshToken = user.RefreshTokens.FirstOrDefault(t => t.IsActive);
-                authModel.RefreshToken = activeRefreshToken.Token;
-                authModel.RefreshTokenExpiration = activeRefreshToken.ExpiresOn;
+                authDto.RefreshToken = activeRefreshToken.Token;
+                authDto.RefreshTokenExpiration = activeRefreshToken.ExpiresOn;
             }
             else
             {
                 var refreshToken = GenerateRefreshToken();
-                authModel.RefreshToken = refreshToken.Token;
-                authModel.RefreshTokenExpiration = refreshToken.ExpiresOn;
+                authDto.RefreshToken = refreshToken.Token;
+                authDto.RefreshTokenExpiration = refreshToken.ExpiresOn;
                 user.RefreshTokens.Add(refreshToken);
                 await userManager.UpdateAsync(user);
             }
 ;
-            return authModel;
+            return authDto;
         }
 
 
@@ -145,6 +148,11 @@ namespace API.Services
                 owner.DisplayName = dto.DisplayName;
             if(dto.ProfileImage is not null && dto.ProfileImage.Length > 0)
             {
+                if(owner.ProfileImage is not null && !string.IsNullOrEmpty(owner.ProfileImage.PublicId))
+                {
+                    var deleteResult = await imageService.DeleteImageAsync(owner.ProfileImage.PublicId);
+                    owner.ProfileImage = null;
+                }
                 var result = await imageService.UploadImageAsync(dto.ProfileImage);
                 ProfileImage image = new()
                 {

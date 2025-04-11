@@ -6,6 +6,6 @@ namespace API.Models
     public class Image
     {
         public string Url { get; set; }
-        public string? PublicId { get; set; }
+        public string PublicId { get; set; }
     }
 }

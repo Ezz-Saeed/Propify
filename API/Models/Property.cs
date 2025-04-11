@@ -20,14 +20,14 @@ namespace API.Models
         [ForeignKey(nameof(Type))]
         public int TypeId { get; set; }
         [JsonIgnore]
-        public PropertyType Type { get; set; }
+        public virtual PropertyType Type { get; set; }
         [ForeignKey(nameof(AppUser))]
         public string AppUserId { get; set; }
         [JsonIgnore]
-        public AppUser AppUser { get; set; }
+        public virtual AppUser AppUser { get; set; }
         public string ImageUrl => Images?.FirstOrDefault(i => i.IsMain)?.Url ?? string.Empty;
         public bool IsDeleted { get; set; }
         [JsonIgnore]
-        public ICollection<PropertyImage>? Images { get; set; }
+        public virtual ICollection<PropertyImage>? Images { get; set; }
     }
 }
