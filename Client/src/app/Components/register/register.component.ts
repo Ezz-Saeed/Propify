@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../Services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { TextInputComponent } from "../text-input/text-input.component";
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule, ReactiveFormsModule, TextInputComponent,CommonModule],
+  imports: [FormsModule, ReactiveFormsModule, TextInputComponent,CommonModule, RouterModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })

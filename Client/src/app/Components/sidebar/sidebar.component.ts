@@ -23,8 +23,13 @@ import { RouterModule } from '@angular/router';
 })
 export class SidebarComponent {
   accountMenuOpen = false;
+  dashboardMenueOpen = false
 
   toggleAccountMenu(){
     this.accountMenuOpen = !this.accountMenuOpen;
+  }
+
+  toggleDashboardMenu(){
+    this.dashboardMenueOpen = !this.dashboardMenueOpen;
   }
 }

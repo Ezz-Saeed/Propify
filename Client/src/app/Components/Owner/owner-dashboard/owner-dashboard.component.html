@@ -1,12 +1,12 @@
 
-<div class="container mx-4 mt-5">
-  <tabset>
-    <tab [heading]="'Properties'">
+<div class="container mx-4 mt-5 text-center">
+  <tabset #ownerDashboard>
+    <tab [heading]="'Properties'" (selectTab)="onTabActivated($event)">
       <app-properties></app-properties>
     </tab>
-    <tab [heading]="'Post Property'">
+    <tab [heading]="'Post Property'" (selectTab)="onTabActivated($event)">
       <app-add-property></app-add-property>
     </tab>
-    <tab [heading]="'Transactions'"></tab>
+    <tab [heading]="'Transactions'" (selectTab)="onTabActivated($event)"></tab>
   </tabset>
 </div>

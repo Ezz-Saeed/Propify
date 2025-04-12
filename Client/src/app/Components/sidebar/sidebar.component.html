@@ -7,12 +7,38 @@
     <li class="">
       <a routerLink="/editProfile" class="text-decoration-none text-primary pointer">Edit Profile</a>
     </li>
+
     <li class="">
       <a routerLink="/account/change-password" class="text-decoration-none text-primary pointer">Change Password</a>
     </li>
     <li class="">
-      <a class="text-danger text-decoration-none pointer">Sign Out</a>
+      <a routerLink="/register" class="text-decoration-none text-primary pointer">Sign Up</a>
     </li>
   </ul>
 </div>
+
+<div class="px-2 pt-2">
+  <h6 class="text-muted pointer list-head" (click)="toggleDashboardMenu()">
+    <i [ngClass]="dashboardMenueOpen ? 'bi bi-chevron-down' : 'bi bi-chevron-right'"></i> Dashboard
+  </h6>
+  <ul class="list" *ngIf="dashboardMenueOpen">
+    <li class="">
+      <a routerLink="/ownerDashboard" class="text-decoration-none text-primary pointer"
+      [queryParams]="{tab:0}">Properties</a>
+    </li>
+    <li class="">
+      <a routerLink="/ownerDashboard" class="text-decoration-none text-primary pointer"
+      [queryParams]="{tab:1}">Post Property</a>
+    </li>
+    <li class="">
+      <a routerLink="/ownerDashboard" class="text-primary text-decoration-none pointer"
+      [queryParams]="{tab:2}">Transactions</a>
+    </li>
+  </ul>
+</div>
+
+<div class="px-2 pt-4">
+  <a class="text-danger text-decoration-none pointer  fs-5"><i class="bi bi-box-arrow-left mx-2 fs-4"></i> Sign Out</a>
+</div>
+
 </div>
