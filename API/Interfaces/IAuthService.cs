@@ -13,6 +13,7 @@ namespace API.Interfaces
         Task<AppUser> LoadCurrentUser(string userId);
         Task<JwtSecurityToken> GenerateToken(AppUser appUser);
         Task<OwnerDto> EditProfileAsync(string id, EditProfileDto dto);
+        Task<bool> ChangePasswordAsync(string userId, ChangePasswordDto changePasswordDto);
         //Task<bool> RevokRefreshToken(string refreshToken);
     }
 }

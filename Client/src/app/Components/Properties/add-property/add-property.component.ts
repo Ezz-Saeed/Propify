@@ -4,6 +4,7 @@ import { TextInputComponent } from "../../text-input/text-input.component";
 import { CommonModule } from '@angular/common';
 import { IType } from '../../../Models/type';
 import { PropertiesService } from '../../../Services/properties.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-property',
@@ -17,7 +18,8 @@ export class AddPropertyComponent implements OnInit {
   propertyTypes: IType[] = []
   selectedFiles: File[] = [];
 
-  constructor(private fb:FormBuilder, private propertiesService:PropertiesService){}
+  constructor(private fb:FormBuilder, private propertiesService:PropertiesService,
+    private router:Router){}
   ngOnInit(): void {
     this.inintializeForm();
     this.loadTypes();
@@ -68,6 +70,7 @@ export class AddPropertyComponent implements OnInit {
     if (this.propertyForm.valid) {
       this.propertiesService.addProperty(this.propertyForm, this.selectedFiles).subscribe({
         next: res=>{
+          this.router.navigate(['/ownerDashboard',{tab:1}])
           // console.log(res)
         },
         error:err=>console.log(err)

@@ -86,4 +86,8 @@ export class AuthService {
     return this.http.put(`${this.baseUrl}/editProfile/`, formData)
   }
 
+  changPassword(model:any){
+    return this.http.put(`${this.baseUrl}/changePassword`, model);
+  }
+
 }

@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 })
 export class LoginComponent implements OnInit {
   loginForm!:FormGroup
-  errorMessage: string | null = null ;
+  errorMessage?: string | null = null ;
   constructor(private fb:FormBuilder, private authService:AuthService,private router:Router){}
   ngOnInit(): void {
     this.initializeForm();
@@ -29,14 +29,11 @@ export class LoginComponent implements OnInit {
   login() {
     this.authService.logIn(this.loginForm.value).subscribe({
       next: res => {
-        console.log(res)
-        this.errorMessage = res.message
-        if(this.errorMessage === null)
-          this.router.navigateByUrl('/');
+        this.errorMessage = null
+        this.router.navigateByUrl('/properties');
       },
       error: err => {
-        console.log("Error received in component:", err);
-        // this.errorMessage = err.message; // Now correctly capturing the error
+        this.errorMessage = err.error.message
       }
     });
 }

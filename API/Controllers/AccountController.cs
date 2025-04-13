@@ -57,7 +57,7 @@ namespace API.Controllers
 
             var result = await authenticationService.RegisterAsync(model);
             
-            if (!result.IsAuthenticated) return Ok(result);
+            if (!result.IsAuthenticated) return Unauthorized(new { Message = result.Message });
             if(!string.IsNullOrEmpty(result.RefreshToken))
                 SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiration);
 
@@ -70,7 +70,7 @@ namespace API.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var result = await authenticationService.GetTokenAsync(model);
-            if (!result.IsAuthenticated) return  Ok(result);
+            if (!result.IsAuthenticated) return  Unauthorized(new {Message = result.Message});
 
             if (!string.IsNullOrEmpty(result.RefreshToken))
                 SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiration);
@@ -98,6 +98,16 @@ namespace API.Controllers
             var result = await authenticationService.EditProfileAsync(id, dto);
             if(result is null) return Unauthorized();
             return Ok(result);
+        }
+
+        [Authorize(Roles = "Owner")]
+        [HttpPut("changePassword")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
+        {
+            var id = User.GetUserId();
+            var result = await authenticationService.ChangePasswordAsync(id, changePasswordDto);
+            if(!result) return Unauthorized(new { Message = "Invalid Password"});
+            return Ok();
         }
 
         private void SetRefreshTokenInCookie(string refreshToken, DateTime expires)

@@ -168,6 +168,16 @@ namespace API.Services
             return ownerToReturn;
         }
 
+        public async Task<bool> ChangePasswordAsync(string userId, ChangePasswordDto changePasswordDto)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if(user is null) return false;
+            var isPasswordValid = await userManager.CheckPasswordAsync(user, changePasswordDto.CurrentPassword);
+            if(!isPasswordValid) return false;
+            var result = await userManager.ChangePasswordAsync(user, changePasswordDto.CurrentPassword,changePasswordDto.NewPassword);
+            return result.Succeeded;
+        }
+
         public async Task<AppUser> LoadCurrentUser(string userId)
         {
             if (string.IsNullOrEmpty(userId)) return null!;
