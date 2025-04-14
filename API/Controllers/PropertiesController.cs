@@ -1,7 +1,9 @@
-﻿using API.DTOs.PropertyDtos;
+﻿using API.DTOs;
+using API.DTOs.PropertyDtos;
 using API.Extensions;
 using API.Interfaces;
 using API.Models;
+using API.Specifications;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +20,7 @@ namespace API.Controllers
         UserManager<AppUser> userManager, IImageService imageService) : ControllerBase
     {
         [HttpPost("addProperty")]
-        [AllowAnonymous]
+        [Authorize(Roles ="Owner")]
         public async Task<IActionResult> AddProperty([FromForm]AddPropertyDto dto)
         {
             if(!ModelState.IsValid) return BadRequest(ModelState);
@@ -29,29 +31,26 @@ namespace API.Controllers
             var property = mapper.Map<Property>(dto);
             
             user.Properties!.Add(property);
-            await userManager.AddToRolesAsync(user, ["Owner"]);
-            var reult = await userManager.UpdateAsync(user);
-
-            if(!reult.Succeeded)
-            {
-                var errors = string.Empty;
-                foreach(var error in reult.Errors)
-                {
-                    errors += $"{error}, ";
-                }
-                return BadRequest(errors);
-            }
+            var type = await unitOfWork.Types.FindAsync(t => t.Id == property.TypeId, "Category");
             var propertyToReturn = mapper.Map<GetPropertiesDto>(property);
+            propertyToReturn.TypeId = property.TypeId;
+            propertyToReturn.TypeName = type.Name;
+            propertyToReturn.CategoryName = type.Category.Name;
             return Ok(propertyToReturn);
         }
 
         [AllowAnonymous]
         [HttpGet("properties")]
-        public async Task<IActionResult> GetAllProperties()
+        public async Task<IActionResult> GetAllProperties([FromQuery]PropertySpecificationParamsDto paramsDto)
         {
-            var properties = await unitOfWork.Properies.GetAllAsync(p=>!p.IsDeleted, "Type", "Type.Category", "Images");
-            var propertiesToReturn = mapper.Map<List<GetPropertiesDto>>(properties);
-            return Ok(propertiesToReturn);
+            var spec = new PropertySpecifications(paramsDto);
+            var countSpec = new PropertyFilterWithCountSpecification(paramsDto);
+            var properties = await unitOfWork.Properies.GetAllAsync(spec);
+            var totalCount = await unitOfWork.Properies.CountAsync(countSpec);
+            var propertiesToReturn = mapper.Map<IReadOnlyList<GetPropertiesDto>>(properties);
+            var result = new PaginatedResultDto<GetPropertiesDto>(paramsDto.PageNumber, paramsDto.PageSize, 
+                totalCount, propertiesToReturn);
+            return Ok(result);
         }
 
         [HttpGet("getProperty/{propertyId}")]
@@ -59,18 +58,23 @@ namespace API.Controllers
         {
             var property = await unitOfWork.Properies.FindAsync(p => p.Id == propertyId, "Type", "Type.Category", "Images");
             if (property is null) return BadRequest(new { Message = "Invalid property ID!" });
-            //var propertyToReturn = 
             return Ok(mapper.Map<GetPropertiesDto>(property));
         }
 
 
         [HttpGet("ownerProperties")]
-        public async Task<IActionResult> GetPropertiesForOwner()
+        public async Task<IActionResult> GetPropertiesForOwner([FromQuery] PropertySpecificationParamsDto paramsDto)
         {
             var userId = User.GetUserId();
-            var properties = await unitOfWork.Properies.GetAllAsync(p => p.AppUserId==userId && !p.IsDeleted, "Type", "Type.Category", "Images");
+            paramsDto.OwnerId = userId;
+            var spec = new PropertySpecifications(paramsDto);
+            var countSpec = new PropertyFilterWithCountSpecification(paramsDto);
+            var properties = await unitOfWork.Properies.GetAllAsync(spec);
+            var totalCount = await unitOfWork.Properies.CountAsync(countSpec);
             var propertiesToReturn = mapper.Map<List<GetPropertiesDto>>(properties);
-            return Ok(propertiesToReturn);
+            var result = new PaginatedResultDto<GetPropertiesDto>(paramsDto.PageNumber, paramsDto.PageSize,
+                totalCount, propertiesToReturn);
+            return Ok(result);
         }
 
         [HttpPut("updateProperty/{id}")]
@@ -160,7 +164,8 @@ namespace API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetTypes()
         {
-            var types = mapper.Map<List<TypeDto>>(await unitOfWork.Types.GetAllAsync(p => true, "Category"));
+            var spec = new TypeSpecification();
+            var types = mapper.Map<List<TypeDto>>(await unitOfWork.Types.GetAllAsync(spec));
             return Ok(types);
         }
     }

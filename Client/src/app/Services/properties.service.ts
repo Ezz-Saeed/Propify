@@ -5,12 +5,14 @@ import { IGetPropery } from '../Models/property';
 import { IType } from '../Models/type';
 import { FormGroup } from '@angular/forms';
 import { IPhoto } from '../Models/photo';
+import { map, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PropertiesService {
   baseUrl = `${Environment.API_URL}/Properties`
+  properties:IGetPropery[] = []
 
   constructor(private http:HttpClient) { }
 
@@ -19,7 +21,16 @@ export class PropertiesService {
   }
 
   getPropertiesForOwner(){
-    return this.http.get<IGetPropery[]>(`${this.baseUrl}/ownerProperties`);
+    if(this.properties.length > 0){
+      // console.log(this.properties)
+      return of(this.properties)
+    }
+    return this.http.get<IGetPropery[]>(`${this.baseUrl}/ownerProperties`).pipe(
+      map((res:IGetPropery[])=>{
+        this.properties = res
+        return res
+      })
+    );
   }
 
   addProperty(propertyForm: FormGroup, images:File[]) {
@@ -35,7 +46,13 @@ export class PropertiesService {
       });
     }
 
-    return this.http.post<IGetPropery>(`${this.baseUrl}/addProperty`, formData);
+    return this.http.post<IGetPropery>(`${this.baseUrl}/addProperty`, formData).pipe(
+      map((p:IGetPropery)=>{
+          this.properties.push(p)
+          // console.log(p)
+          return p
+      })
+    );
   }
 
   updateProperty(model:any, id:number){

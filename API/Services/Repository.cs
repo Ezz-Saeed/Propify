@@ -1,5 +1,6 @@
 ﻿using API.Data;
 using API.Interfaces;
+using API.Specifications;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -25,17 +26,9 @@ namespace API.Services
            return await query.SingleOrDefaultAsync(predicate);
         }
 
-        public async Task<IReadOnlyList<T>> GetAllAsync(Expression<Func<T, bool>>? predicate, params string[]? eagers)
+        public async Task<IReadOnlyList<T>> GetAllAsync(ISpecification<T> specification)
         {
-            IQueryable<T> values = context.Set<T>();
-            if(eagers is not null && eagers.Length > 0)
-            {
-                foreach(var eager in eagers)
-                {
-                    values = values.Include(eager);
-                }
-            }
-            return await values.Where(predicate).ToListAsync();
+            return await ApplySpecification(specification).ToListAsync();
         }
 
         public void DeleteAsync(T entity)
@@ -46,6 +39,16 @@ namespace API.Services
         public void Update(T entity)
         {
             context.Set<T>().Update(entity);
+        }
+
+        public async Task<int> CountAsync(ISpecification<T> specification)
+        {
+            return await ApplySpecification(specification).CountAsync();
+        }
+
+        private IQueryable<T> ApplySpecification(ISpecification<T> specification)
+        {
+            return SpecificationEvaluator<T>.GetQuery(context.Set<T>().AsQueryable(), specification);
         }
     }
 }

@@ -30,8 +30,18 @@ export class ChangePasswordComponent implements OnInit {
 
   private matchPasswords(matchTo:string):ValidatorFn{
     return (control:AbstractControl)=>{
-      return control.value === control.parent?.get(matchTo)?.value
-      ? null : {isNotMatch:true};
+      if(control.value === control.parent?.get(matchTo)?.value){
+        this.errorMessage = null
+        return null
+      }else{
+       if(control.dirty && control.value !== control.parent?.get(matchTo)?.value){
+         this.errorMessage = 'Passwords do not match'
+       }else{
+        this.errorMessage = null
+       }
+        return {isNotMatch:true};
+      }
+
     }
   }
 
