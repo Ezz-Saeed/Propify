@@ -34,3 +34,17 @@ export class IGetPropery implements IProperty{
   categoryName!: string;
   ownerName!: string;
 }
+
+export class Pagination{
+  pageNumber!:number
+  pageSize!:number;
+  totalCount!:number;
+}
+
+export class PaginatedResult{
+  // pageNumber!:number
+  // pageSize!:number;
+  // totalCount!:number;
+  data!:IGetPropery[]
+  pagination!:Pagination
+}

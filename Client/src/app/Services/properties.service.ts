@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Environment } from '../Environments/environment';
-import { HttpClient } from '@angular/common/http';
-import { IGetPropery } from '../Models/property';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { IGetPropery, PaginatedResult } from '../Models/property';
 import { IType } from '../Models/type';
 import { FormGroup } from '@angular/forms';
 import { IPhoto } from '../Models/photo';
@@ -16,8 +16,19 @@ export class PropertiesService {
 
   constructor(private http:HttpClient) { }
 
-  getProperties(){
-    return this.http.get<IGetPropery[]>(`${this.baseUrl}/properties`);
+  getProperties(pageNumber:number=1, pageSize:number=6){
+    const result = new PaginatedResult();
+    let params = this.getPaginationParams(pageNumber, pageSize);
+    return this.http.get<PaginatedResult>(`${this.baseUrl}/properties`,
+      {observe: 'response', params}).pipe(
+        map((res)=>{
+          if(res.body){
+            result.data = res.body.data;
+            result.pagination = res.body.pagination
+          }
+          return result
+        })
+      );
   }
 
   getPropertiesForOwner(){
@@ -76,5 +87,12 @@ export class PropertiesService {
 
   deleteImage(id:number, publicId:string){
     return this.http.delete(`${this.baseUrl}/deleteImage/${id}?publicId=${publicId}`)
+  }
+
+  private getPaginationParams(pageNumber:number, pageSize:number){
+    let params = new HttpParams();
+    params = params.append('pageNumber', pageNumber.toString());
+    params = params.append('pageSize', pageSize.toString());
+    return params;
   }
 }
