@@ -8,3 +8,7 @@
 .card-img-top{
   max-height: 200px;
 }
+
+.pointer{
+  cursor: pointer;
+}

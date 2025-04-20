@@ -72,9 +72,9 @@ namespace API.Controllers
             var properties = await unitOfWork.Properies.GetAllAsync(spec);
             var totalCount = await unitOfWork.Properies.CountAsync(countSpec);
             var propertiesToReturn = mapper.Map<List<GetPropertiesDto>>(properties);
-            var result = new PaginatedResultDto<GetPropertiesDto>(paramsDto.PageNumber, paramsDto.PageSize,
-                totalCount, propertiesToReturn);
-            return Ok(result);
+            //var result = new PaginatedResultDto<GetPropertiesDto>(paramsDto.PageNumber, paramsDto.PageSize,
+            //    totalCount, propertiesToReturn);
+            return Ok(propertiesToReturn);
         }
 
         [HttpPut("updateProperty/{id}")]
@@ -167,6 +167,13 @@ namespace API.Controllers
             var spec = new TypeSpecification();
             var types = mapper.Map<List<TypeDto>>(await unitOfWork.Types.GetAllAsync(spec));
             return Ok(types);
+        }
+
+        [HttpGet("categories")]
+        public async Task<IActionResult> GetCategories()
+        {
+            var categories = await unitOfWork.Categories.GetAllAsync(null);
+            return Ok(categories);
         }
     }
 }

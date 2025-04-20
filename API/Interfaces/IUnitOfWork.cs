@@ -6,6 +6,7 @@ namespace API.Interfaces
     {
         IRepository<Property> Properies { get; }
         IRepository<PropertyType> Types { get; }
+        IRepository<Category> Categories { get; }
         Task<bool>Dispose();
     }
 }

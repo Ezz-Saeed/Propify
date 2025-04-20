@@ -12,11 +12,13 @@ namespace API.Services
         {
             Properies = new Repository<Property>(context);
             Types = new Repository<PropertyType>(context);
+            Categories = new Repository<Category>(context);
             this.context = context;
         }
         public IRepository<Property> Properies { get; private set; }
 
         public IRepository<PropertyType> Types { get; private set; }
+        public IRepository<Category> Categories { get; private set; }
 
         public async Task<bool> Dispose()
         {

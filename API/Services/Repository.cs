@@ -26,9 +26,11 @@ namespace API.Services
            return await query.SingleOrDefaultAsync(predicate);
         }
 
-        public async Task<IReadOnlyList<T>> GetAllAsync(ISpecification<T> specification)
+        public async Task<IReadOnlyList<T>> GetAllAsync(ISpecification<T>? specification)
         {
-            return await ApplySpecification(specification).ToListAsync();
+            if(specification is not null)
+                return await ApplySpecification(specification).ToListAsync();
+            return await context.Set<T>().ToListAsync();
         }
 
         public void DeleteAsync(T entity)

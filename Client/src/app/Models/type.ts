@@ -4,3 +4,8 @@ export interface IType {
   categoryName:string
   categoryId:number
 }
+
+export interface ICategory{
+  id:number,
+  name:string
+}

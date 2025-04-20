@@ -1,4 +1,69 @@
 <div class="container mt-4">
+  <div class="row mb-3">
+    <!-- Search Form -->
+    <div class="col-md-3">
+      <form (ngSubmit)="loadProperties()" class="input-group">
+        <span class="input-group-text bg-white border-end-0">
+          <i class="bi bi-search"></i>
+        </span>
+        <input type="search" class="form-control me-2" [(ngModel)]="filterParams.search"
+        name="search" (keyup)="loadProperties()">
+        <!-- <button class="btn btn-secondary mx-2" type="submit">Search</button> -->
+      </form>
+    </div>
+
+    <!-- Main Filter Form -->
+    <form class="col-md-8" (ngSubmit)="loadProperties()" #form="ngForm">
+      <div class="row g-2">
+        <div class="col-md-3">
+          <select name="typeId" class="form-select" [(ngModel)]="filterParams.typeId">
+            <option [value]="null">All Types</option>
+            <option *ngFor="let type of types" [value]="type.id">{{ type.name }}</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <select name="categoryId" class="form-select" [(ngModel)]="filterParams.categoryId">
+            <option [value]="null">All Categories</option>
+            <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+          </select>
+        </div>
+
+        <!-- Toggle Advanced Filters -->
+        <div class="col-md-3">
+          <button class="btn btn-outline-secondary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#advancedFilters" aria-expanded="false">
+            More
+          </button>
+        </div>
+
+        <div class="col-md-3">
+          <button class="btn btn-primary w-100" type="submit">Apply</button>
+        </div>
+      </div>
+
+      <!-- Advanced Filters -->
+      <div class="collapse mt-3" id="advancedFilters">
+        <div class="row g-2">
+          <div class="col-md-2">
+            <input type="number" name="minPrice" [(ngModel)]="filterParams.minPrice" class="form-control" placeholder="Min Price" />
+          </div>
+          <div class="col-md-2">
+            <input type="number" name="maxPrice" [(ngModel)]="filterParams.maxPrice" class="form-control" placeholder="Max Price" />
+          </div>
+          <div class="col-md-2">
+            <input type="number" name="bedRooms" [(ngModel)]="filterParams.bedRooms" class="form-control" placeholder="Bedrooms" />
+          </div>
+          <div class="col-md-2">
+            <input type="number" name="bathRooms" [(ngModel)]="filterParams.bathRooms" class="form-control" placeholder="Bathrooms" />
+          </div>
+          <div class="col-md-2">
+            <input type="number" name="areaPrice" [(ngModel)]="filterParams.areaPrice" class="form-control" placeholder="Area (sq.ft)" />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
   <div class="row">
     <div *ngFor="let property of properties" class="col-lg-4 col-md-6 col-sm-12 mb-4">
       <div class="card shadow-sm h-100" (click)="propertyDetails(property)" style="cursor: pointer;">
@@ -8,12 +73,6 @@
           <p class="card-text"> {{ property.bedRooms ?? 'N/A' }} bds |
              {{ property.bathRooms ?? 'N/A' }} ba | {{ property.area }} sq.ft</p>
           <p class="card-text">{{ property.address }}, {{ property.city }}</p>
-          <!-- <p class="card-text">{{ property.description }}</p>
-          <p class="card-text"><strong>Type:</strong> {{ property.typeName }} | {{ property.categoryName }}</p>
-          <p class="card-text"><strong>Price:</strong> ${{ property.price | number }}</p>
-          <p class="card-text"><strong>Bedrooms:</strong> {{ property.bedRooms ?? 'N/A' }} |
-            <strong>Bathrooms:</strong> {{ property.bathRooms ?? 'N/A' }}</p>
-          <p class="card-text"><strong>Area:</strong> {{ property.area }} sq.ft</p> -->
           <span class="badge" [ngClass]="{'bg-success': property.isAvailable, 'bg-danger': !property.isAvailable}">
             {{ property.isAvailable ? 'Available' : 'Sold Out' }}
           </span>
@@ -23,8 +82,7 @@
     </div>
   </div>
 
-
-  <div class="d-flex justify-content-center" *ngIf="pagination">
+  <div class="d-flex justify-content-center" *ngIf="pagination && pagination.totalCount > 0">
     <pagination
     [boundaryLinks]="true"
     [totalItems]="pagination.totalCount"
@@ -39,4 +97,14 @@
   </pagination>
   </div>
 
-</div>
+  <div class="d-flex justify-content-center align-items-center text-muted fs-3"
+  *ngIf="pagination.totalCount===0" style="height: 70vh; ">
+    <p>No Properties match</p>
+  </div>
+
+  </div>
+
+
+
+
+

@@ -2,23 +2,41 @@ import { Injectable } from '@angular/core';
 import { Environment } from '../Environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { IGetPropery, PaginatedResult } from '../Models/property';
-import { IType } from '../Models/type';
+import { ICategory, IType } from '../Models/type';
 import { FormGroup } from '@angular/forms';
 import { IPhoto } from '../Models/photo';
 import { map, of } from 'rxjs';
+import { FilterParams } from '../Models/filter.params';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PropertiesService {
   baseUrl = `${Environment.API_URL}/Properties`
-  properties:IGetPropery[] = []
+  ownerProperties:IGetPropery[] = []
 
   constructor(private http:HttpClient) { }
 
-  getProperties(pageNumber:number=1, pageSize:number=6){
+  getProperties(pageNumber:number=1, pageSize:number=6, filterParams?:FilterParams){
     const result = new PaginatedResult();
     let params = this.getPaginationParams(pageNumber, pageSize);
+    if(filterParams){
+      if(filterParams.typeId){
+        params = params.append('typeId', filterParams.typeId)
+      }
+      if(filterParams.categoryId){
+        params = params.append('categoryId', filterParams.categoryId)
+      }
+      if(filterParams.minPrice){
+        params = params.append('minPrice', filterParams.minPrice)
+      }
+      if(filterParams.maxPrice){
+        params = params.append('maxPrice', filterParams.maxPrice)
+      }
+      if(filterParams.bedRooms){
+        params = params.append('bedRooms', filterParams.bedRooms)
+      }
+    }
     return this.http.get<PaginatedResult>(`${this.baseUrl}/properties`,
       {observe: 'response', params}).pipe(
         map((res)=>{
@@ -32,13 +50,13 @@ export class PropertiesService {
   }
 
   getPropertiesForOwner(){
-    if(this.properties.length > 0){
+    if(this.ownerProperties.length > 0){
       // console.log(this.properties)
-      return of(this.properties)
+      return of(this.ownerProperties)
     }
     return this.http.get<IGetPropery[]>(`${this.baseUrl}/ownerProperties`).pipe(
       map((res:IGetPropery[])=>{
-        this.properties = res
+        this.ownerProperties = res
         return res
       })
     );
@@ -59,7 +77,7 @@ export class PropertiesService {
 
     return this.http.post<IGetPropery>(`${this.baseUrl}/addProperty`, formData).pipe(
       map((p:IGetPropery)=>{
-          this.properties.push(p)
+          this.ownerProperties.push(p)
           // console.log(p)
           return p
       })
@@ -73,6 +91,10 @@ export class PropertiesService {
 
   getTypes(){
     return this.http.get<IType[]>(`${this.baseUrl}/types`)
+  }
+
+  getCategories(){
+    return this.http.get<ICategory[]>(`${this.baseUrl}/categories`)
   }
 
   uploadImage(id:number, file:File){
