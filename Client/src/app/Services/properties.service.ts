@@ -50,16 +50,16 @@ export class PropertiesService {
   }
 
   getPropertiesForOwner(){
-    if(this.ownerProperties.length > 0){
-      // console.log(this.properties)
-      return of(this.ownerProperties)
-    }
-    return this.http.get<IGetPropery[]>(`${this.baseUrl}/ownerProperties`).pipe(
-      map((res:IGetPropery[])=>{
-        this.ownerProperties = res
-        return res
-      })
-    );
+    // if(this.ownerProperties.length > 0){
+    //   return of(this.ownerProperties)
+    // }
+    return this.http.get<IGetPropery[]>(`${this.baseUrl}/ownerProperties`)
+    // .pipe(
+    //   map((res:IGetPropery[])=>{
+    //     this.ownerProperties = res
+    //     return res
+    //   })
+    // );
   }
 
   addProperty(propertyForm: FormGroup, images:File[]) {
