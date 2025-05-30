@@ -7,7 +7,8 @@ namespace API.Specifications
     {
         public PropertySpecifications(PropertySpecificationParamsDto propertyParams)
             : base(p =>
-                (string.IsNullOrEmpty(propertyParams.Search) || p.Description.ToLower().Contains(propertyParams.Search) ) &&
+                (string.IsNullOrEmpty(propertyParams.Search) || p.Address.ToLower().Contains(propertyParams.Search) ||
+                 p.City.ToLower().Contains(propertyParams.Search)) &&
                 (!propertyParams.TypeId.HasValue || p.TypeId == propertyParams.TypeId) && 
                 (!propertyParams.CategoryId.HasValue || p.Type.CategoryId == propertyParams.CategoryId) &&
                 (string.IsNullOrEmpty(propertyParams.OwnerId) || p.AppUserId == propertyParams.OwnerId) &&

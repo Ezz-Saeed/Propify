@@ -4,10 +4,10 @@
     <div class="col-md-3">
       <form (ngSubmit)="loadProperties()" class="input-group">
         <span class="input-group-text bg-white border-end-0">
-          <i class="bi bi-search"></i>
+          <i class="bi bi-search" (click)="loadProperties()"></i>
         </span>
         <input type="search" class="form-control me-2" [(ngModel)]="filterParams.search"
-        name="search" (keyup)="loadProperties()">
+        name="search">
         <!-- <button class="btn btn-secondary mx-2" type="submit">Search</button> -->
       </form>
     </div>
@@ -57,7 +57,7 @@
             <input type="number" name="bathRooms" [(ngModel)]="filterParams.bathRooms" class="form-control" placeholder="Bathrooms" />
           </div>
           <div class="col-md-2">
-            <input type="number" name="areaPrice" [(ngModel)]="filterParams.areaPrice" class="form-control" placeholder="Area (sq.ft)" />
+            <input type="number" name="area" [(ngModel)]="filterParams.area" class="form-control" placeholder="Area (sq.ft)" />
           </div>
         </div>
       </div>
@@ -99,7 +99,7 @@
 
   <div class="d-flex justify-content-center align-items-center text-muted fs-3"
   *ngIf="pagination.totalCount===0" style="height: 70vh; ">
-    <p>No Properties match</p>
+    <p>No matched Properties</p>
   </div>
 
   </div>

@@ -21,10 +21,10 @@ export class PropertiesService {
     const result = new PaginatedResult();
     let params = this.getPaginationParams(pageNumber, pageSize);
     if(filterParams){
-      if(filterParams.typeId){
-        params = params.append('typeId', filterParams.typeId)
+      if(filterParams.typeId != null && !isNaN(filterParams.typeId)){
+        params = params.append('typeId', filterParams.typeId.toString())
       }
-      if(filterParams.categoryId){
+      if(filterParams.categoryId != null && !isNaN(filterParams.categoryId)){
         params = params.append('categoryId', filterParams.categoryId)
       }
       if(filterParams.minPrice){
@@ -35,6 +35,15 @@ export class PropertiesService {
       }
       if(filterParams.bedRooms){
         params = params.append('bedRooms', filterParams.bedRooms)
+      }
+      if(filterParams.bathRooms){
+        params = params.append('bathRooms', filterParams.bathRooms)
+      }
+      if(filterParams.area){
+        params = params.append('area', filterParams.area)
+      }
+      if(filterParams.search){
+        params = params.append('search', filterParams.search)
       }
     }
     return this.http.get<PaginatedResult>(`${this.baseUrl}/properties`,

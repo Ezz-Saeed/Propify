@@ -7,5 +7,5 @@ export class FilterParams{
   maxPrice?:number;
   bedRooms?:number;
   bathRooms?:number;
-  areaPrice?:number;
+  area?:number;
 }
